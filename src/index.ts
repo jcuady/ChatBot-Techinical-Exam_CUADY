@@ -135,10 +135,11 @@ app.get('/api/health', (_req: Request, res: Response) => {
   res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
-// Start the server
-app.listen(config.port, () => {
-  // eslint-disable-next-line no-console
-  console.warn(`
+// Start the server (only when not running inside Vercel serverless environment)
+if (!process.env.VERCEL) {
+  app.listen(config.port, () => {
+    // eslint-disable-next-line no-console
+    console.warn(`
 ========================================
   DCBSD Chatbot Simulation
 ========================================
@@ -150,6 +151,7 @@ app.listen(config.port, () => {
   Health:       http://localhost:${config.port}/api/health
 ========================================
 `);
-});
+  });
+}
 
 export default app;
