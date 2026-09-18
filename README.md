@@ -16,6 +16,15 @@ This chatbot demonstrates a professional engineering approach to building a conv
 
 ---
 
+## 🚀 Live Deployments
+
+- **Live Production Web Application**: [https://dcbsd-chatbot-simulation.vercel.app](https://dcbsd-chatbot-simulation.vercel.app)
+- **GitHub Repository**: [https://github.com/jcuady/ChatBot-Techinical-Exam_CUADY](https://github.com/jcuady/ChatBot-Techinical-Exam_CUADY)
+- **API Health Check**: [https://dcbsd-chatbot-simulation.vercel.app/api/health](https://dcbsd-chatbot-simulation.vercel.app/api/health)
+- **Bot Activity Endpoint**: `https://dcbsd-chatbot-simulation.vercel.app/api/messages`
+
+---
+
 ## Exam Requirements
 
 > **Original Requirement:** Set up an emulator and create a simple Chatbot that takes in Name, Mobile, and Address as inputs, then displays all the taken inputs back to the user. Program must verify mobile number format and have validation if information does not look valid.
