@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="DCBSD Chatbot Simulation — Technical Examination. A deterministic conversational intake chatbot.">
+  <title>DCBSD Chatbot Assistant</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app" class="app-container">
+    <!-- Header -->
+    <header class="chat-header" role="banner">
+      <div class="header-content">
+        <div class="header-logo" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="8" fill="#1a365d"/>
+            <path d="M8 10h16M8 16h12M8 22h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="24" cy="22" r="3" fill="#48bb78"/>
+          </svg>
+        </div>
+        <div class="header-text">
+          <h1>DCBSD Chatbot Assistant</h1>
+          <p class="header-status" id="connection-status" role="status">
+            <span class="status-dot" aria-hidden="true"></span>
+            Online
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chat Messages Area -->
+    <main class="chat-messages" id="chat-messages" role="log" aria-label="Chat messages" aria-live="polite">
+      <!-- Messages are injected here by JavaScript -->
+    </main>
+
+    <!-- Input Area -->
+    <footer class="chat-input-area" role="contentinfo">
+      <form id="chat-form" class="chat-form" autocomplete="off">
+        <label for="chat-input" class="sr-only">Type your message</label>
+        <input
+          type="text"
+          id="chat-input"
+          class="chat-input"
+          placeholder="Type your message..."
+          aria-label="Type your message"
+          maxlength="1000"
+          autofocus
+        >
+        <button type="submit" id="send-button" class="send-button" aria-label="Send message">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </form>
+    </footer>
+  </div>
+
+  <script src="chat.js"></script>
+</body>
+</html>

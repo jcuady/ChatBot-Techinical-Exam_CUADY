@@ -1,0 +1,47 @@
+{
+  "name": "dcbsd-chatbot-simulation",
+  "version": "1.0.0",
+  "description": "DCBSD Chatbot Simulation — Technical Examination. A deterministic conversational intake chatbot using Microsoft 365 Agents SDK.",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "vercel-build": "npm run clean && tsc -p tsconfig.build.json",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest watch",
+    "lint": "eslint src/ tests/ --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "chatbot",
+    "microsoft-agents-sdk",
+    "typescript",
+    "dcbsd"
+  ],
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@microsoft/agents-activity": "^1.8.1",
+    "@microsoft/agents-hosting": "^1.8.1",
+    "@microsoft/agents-hosting-express": "^1.8.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "rimraf": "^6.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.11"
+  }
+}
