@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "name": "dcbsd-chatbot-simulation",
   "rewrites": [
     {
       "source": "/api/(.*)",
