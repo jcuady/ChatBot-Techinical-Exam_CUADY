@@ -11,9 +11,6 @@
 import { handleMessage, handleCardAction, BotResponse } from '../conversation/flow';
 import { PROMPTS } from '../conversation/prompts';
 
-// Re-export full Microsoft Agents SDK classes from agentSdk for direct consumer access
-export { DCBSDChatbotAgent, AgentsResponseAdapter, processAgentActivity } from './agentSdk';
-
 export interface ActivityContext {
   activity: {
     type: string;
