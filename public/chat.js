@@ -73,7 +73,12 @@
 
   // ── Session Initialization & Reset ────────────────────────
 
+  let isInitializing = false;
+
   async function initialize() {
+    if (isInitializing) return;
+    isInitializing = true;
+    chatMessages.innerHTML = '';
     updateTelemetry();
     checkApiHealth();
 
@@ -94,6 +99,8 @@
       }
     } catch (err) {
       addBotMessage('Unable to connect to the secure banking assistant. Please refresh the page.', null);
+    } finally {
+      isInitializing = false;
     }
 
     if (chatInput) chatInput.focus();
@@ -103,6 +110,7 @@
     if (isProcessing) return;
     conversationId = generateConversationId();
     chatMessages.innerHTML = '';
+    isInitializing = false;
     updateTelemetry();
     if (notify !== false) {
       showToast('Conversation reset. Starting new session.', 'info');
