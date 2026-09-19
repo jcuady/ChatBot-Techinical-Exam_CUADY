@@ -8,7 +8,7 @@
   <p>
     <a href="https://dcbsd-chatbot-simulation.vercel.app"><img src="https://img.shields.io/badge/Vercel-Production%20Live-3b0764?style=for-the-badge&logo=vercel" alt="Live Demo"></a>
     <a href="https://github.com/jcuady/ChatBot-Techinical-Exam_CUADY"><img src="https://img.shields.io/badge/GitHub-Repository-b1006f?style=for-the-badge&logo=github" alt="Repository"></a>
-    <a href="#-automated-verification-suites"><img src="https://img.shields.io/badge/Tests-90%2F90%20Passing-10b981?style=for-the-badge&logo=vitest" alt="Tests"></a>
+    <a href="#-automated-verification-suites"><img src="https://img.shields.io/badge/Tests-93%2F93%20Passing-10b981?style=for-the-badge&logo=vitest" alt="Tests"></a>
     <a href="scripts/verify-sdk-deep.js"><img src="https://img.shields.io/badge/Agents%20SDK-29%2F29%20Verified-0078D4?style=for-the-badge&logo=microsoft" alt="SDK Verified"></a>
     <a href="docs/SECURITY.md"><img src="https://img.shields.io/badge/Security-Bank--Grade%20Shielded-dba464?style=for-the-badge&logo=shield" alt="Security"></a>
   </p>
@@ -327,7 +327,7 @@ cp .env.example .env
 
 | Command | Description / Target |
 |---|---|
-| `npm test` | Executes the complete 90-test automated suite via Vitest (SDK agents, API integration, conversation, mobile, security) |
+| `npm test` | Executes the complete 93-test automated suite via Vitest (SDK agents, API integration, conversation, mobile, security, Adaptive Card form intake) |
 | `npm run test:sdk` | **Deep Microsoft 365 Agents SDK verification** (`scripts/verify-sdk-deep.js`): Asserts genuine `@microsoft/agents-*` packages, `ActivityHandler`, `TurnContext`, `CardFactory`, and turn pipelines |
 | `npm run test:api` | Executes HTTP API integration tests (`tests/api-integration.test.ts`) covering `/api/health`, `/api/chat`, `/api/chat/start`, and `/api/messages` |
 | `npm run test:e2e` | Automated end-to-end regression & smoke tests across all states and endpoints |
