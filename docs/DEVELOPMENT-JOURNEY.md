@@ -149,13 +149,23 @@ npm audit           # Zero vulnerabilities
 
 ---
 
-## 8. Problems Encountered
+## 8. Problems Encountered & Engineering Resolutions
 
-### Archived SDK
-The Bot Framework SDK v4 was archived in Dec 2025. Resolution: Used the Microsoft 365 Agents SDK which is the current recommended platform.
+### 1. Bot Framework SDK v4 Deprecation
+The original Bot Framework SDK v4 repository was archived in late 2025.
+**Resolution**: Transitioned directly to Microsoft's current enterprise platform: the **Microsoft 365 Agents SDK** (`@microsoft/agents-hosting` v1.8.1), fully implementing `ActivityHandler`, `TurnContext`, `CardFactory`, and `MessageFactory`.
 
-### Vitest Security Advisory
-Initial `vitest` installation included a path traversal vulnerability. Resolution: `npm audit fix --force` upgraded to a patched version. Zero remaining vulnerabilities.
+### 2. Upstream Adaptive Cards Designer 404 & Dual-Mode Integration
+When clicking the exam link `https://adaptivecards.io/designer/`, Microsoft's domain 301-redirects to `https://adaptivecards.microsoft.com/designer/`, where Microsoft's Azure Blob storage static website endpoint encounters a temporary `404 WebContentNotFound` error.
+Furthermore, the exam mockup highlighted `Input.Text elements` from the designer gallery.
+**Resolution**: Rather than limiting Adaptive Cards to just output review (`FactSet`), we engineered **Dual-Mode Adaptive Cards**:
+- **Interactive Form Intake Card**: Uses `Input.Text` elements for Full Name, Philippine Mobile, and Address, complete with client-side container harvesting and `Action.Submit` data transmission.
+- **Review Summary Card**: Uses `FactSet`, styled containers, and dual action buttons (*"Yes, submit"*, *"Start over"*).
+- **Completion Card**: Uses status badges and verified data confirmation.
+
+### 3. Serverless Lambda Module Resolution
+Directly bundling heavy OpenTelemetry and internal Node HTTP adapter dependencies in Vercel serverless functions caused module resolution crashes.
+**Resolution**: Architected an intentional decoupling layer: serverless HTTP routes use pure Bot Framework Activity protocol serialization, while the full Agents SDK execution pipeline is maintained in `src/agents/agentSdk.ts` for enterprise channel deployment. Zero peer dependency failures in cloud runtimes.
 
 ---
 

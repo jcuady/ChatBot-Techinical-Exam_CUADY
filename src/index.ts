@@ -13,7 +13,7 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import { loadConfig } from './config/environment';
 import { onMessageActivity, onConversationUpdate, ActivityContext } from './agents/chatbot';
-import { handleMessage, BotResponse } from './conversation/flow';
+import { handleMessage, handleCardAction, BotResponse } from './conversation/flow';
 import { PROMPTS } from './conversation/prompts';
 
 // Load environment variables before anything else
@@ -93,10 +93,21 @@ app.post('/api/messages', async (req: Request, res: Response) => {
  */
 app.post('/api/chat', (req: Request, res: Response) => {
   try {
-    const { conversationId, text } = req.body as { conversationId?: string; text?: string };
+    const { conversationId, text, action, formData } = req.body as {
+      conversationId?: string;
+      text?: string;
+      action?: string;
+      formData?: { name?: string; mobile?: string; address?: string };
+    };
 
     if (!conversationId || typeof conversationId !== 'string') {
       res.status(400).json({ error: 'Missing or invalid conversationId' });
+      return;
+    }
+
+    if (action || formData) {
+      const responses: BotResponse[] = handleCardAction(conversationId, action ?? 'submit_intake_form', formData);
+      res.status(200).json({ responses });
       return;
     }
 

@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import { handleMessage } from '../src/conversation/flow';
+import { handleMessage, handleCardAction } from '../src/conversation/flow';
 import { clearState } from '../src/state/conversationState';
 
 const CONV_ID = 'test-conversation';
@@ -148,4 +148,52 @@ describe('Conversation Flow', () => {
       expect(response[0].adaptiveCard).toBeDefined();
     });
   });
+
+  describe('Interactive Adaptive Card Form Intake (Input.Text elements)', () => {
+    it('serves intake form card on "open form" command', () => {
+      const response = handleMessage(CONV_ID, 'open form');
+      expect(response[0].adaptiveCard).toBeDefined();
+      expect(response[0].adaptiveCard?.type).toBe('AdaptiveCard');
+
+      const body = response[0].adaptiveCard?.body as Array<Record<string, unknown>>;
+      expect(body).toBeDefined();
+      const container = body.find(el => el.type === 'Container') as { items: Array<Record<string, unknown>> };
+      expect(container).toBeDefined();
+
+      const inputElements = container.items.filter(item => item.type === 'Input.Text');
+      expect(inputElements.length).toBe(3);
+      expect(inputElements.map(el => el.id)).toEqual(['name', 'mobile', 'address']);
+    });
+
+    it('processes valid form card submission and transitions to CONFIRM', () => {
+      const response = handleCardAction(CONV_ID, 'submit_intake_form', {
+        name: 'Carlos Yulo',
+        mobile: '09171234567',
+        address: 'Malate, Manila City',
+      });
+
+      expect(response[0].adaptiveCard).toBeDefined();
+      expect(response[0].adaptiveCard?.type).toBe('AdaptiveCard');
+      expect(response[0].text).toContain('Carlos Yulo');
+      expect(response[0].text).toContain('+639171234567');
+      expect(response[0].text).toContain('Malate, Manila City');
+
+      // Subsequent yes should complete the flow
+      const confirmResponse = handleMessage(CONV_ID, 'yes');
+      expect(confirmResponse[0].text).toContain('Thank you');
+      expect(confirmResponse[0].text).toContain('Carlos');
+    });
+
+    it('re-prompts with error card when mobile number is invalid on form card submission', () => {
+      const response = handleCardAction(CONV_ID, 'submit_intake_form', {
+        name: 'Carlos Yulo',
+        mobile: '12345',
+        address: 'Malate, Manila City',
+      });
+
+      expect(response[0].adaptiveCard).toBeDefined();
+      expect(response[0].text).toContain('valid Philippine mobile number');
+    });
+  });
 });
+

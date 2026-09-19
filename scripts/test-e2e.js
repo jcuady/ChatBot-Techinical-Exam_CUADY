@@ -243,6 +243,48 @@ async function runSuite() {
   assert(!xssData.responses[0].text.includes('<script>'), 'Dangerous <script> tag is completely neutralized/sanitized');
   console.log('');
 
+  // 13. Interactive Adaptive Card Form Intake (Input.Text elements)
+  console.log('13. Verifying Interactive Adaptive Card Form Intake (Input.Text elements)...');
+  const formConvId = 'form-e2e-' + Date.now();
+  const formReqRes = await fetch(`${targetUrl}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      conversationId: formConvId,
+      text: 'open form',
+    }),
+  });
+  assert(formReqRes.status === 200, 'Form request returns HTTP 200 OK');
+  const formReqData = await formReqRes.json();
+  assert(formReqData.responses[0].adaptiveCard, 'Form request returns Adaptive Card');
+  const formCard = formReqData.responses[0].adaptiveCard;
+  assert(formCard.type === 'AdaptiveCard', 'Card type is "AdaptiveCard"');
+  const formContainer = formCard.body.find(el => el.type === 'Container');
+  assert(formContainer && formContainer.items.some(el => el.type === 'Input.Text' && el.id === 'name'), 'Contains Input.Text for name');
+  assert(formContainer.items.some(el => el.type === 'Input.Text' && el.id === 'mobile'), 'Contains Input.Text for mobile');
+  assert(formContainer.items.some(el => el.type === 'Input.Text' && el.id === 'address'), 'Contains Input.Text for address');
+
+  // Submit the form card
+  const formSubmitRes = await fetch(`${targetUrl}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      conversationId: formConvId,
+      action: 'submit_intake_form',
+      formData: {
+        name: 'Lea Salonga',
+        mobile: '09179876543',
+        address: 'Greenhills, San Juan City',
+      },
+    }),
+  });
+  assert(formSubmitRes.status === 200, 'Form submission returns HTTP 200 OK');
+  const formSubmitData = await formSubmitRes.json();
+  assert(formSubmitData.responses[0].adaptiveCard, 'Form submission returns confirmation Adaptive Card');
+  assert(formSubmitData.responses[0].text.includes('Lea Salonga'), 'Confirmation reflects submitted name');
+  assert(formSubmitData.responses[0].text.includes('+639179876543'), 'Confirmation reflects normalized mobile');
+  console.log('');
+
   const duration = ((Date.now() - startTime) / 1000).toFixed(2);
   console.log('========================================================================');
   console.log(`E2E SUITE RESULTS: ${passedCount} PASSED, ${failedCount} FAILED (${duration}s)`);

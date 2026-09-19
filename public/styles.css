@@ -537,6 +537,60 @@ body {
   color: var(--color-text-primary);
 }
 
+.card-title--error {
+  color: var(--brand-ruby-dark);
+  font-size: 0.875rem;
+  background: rgba(225, 29, 72, 0.08);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--brand-ruby-dark);
+  margin-bottom: 4px;
+}
+
+.card-subtle-text {
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.card-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.card-input-field {
+  width: 100%;
+  padding: 9px 12px;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--ew-purple-900);
+  background: #ffffff;
+  border: 1.5px solid rgba(75, 20, 139, 0.2);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.card-input-field:focus {
+  border-color: var(--ew-flirt);
+  box-shadow: 0 0 0 3px rgba(177, 0, 111, 0.15);
+}
+
+.card-input-field::placeholder {
+  color: #94a3b8;
+  font-size: 0.8125rem;
+}
+
+.card-input-field--multiline {
+  resize: vertical;
+  min-height: 52px;
+}
+
 .card-actions {
   display: flex;
   gap: 10px;

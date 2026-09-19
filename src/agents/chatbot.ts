@@ -60,7 +60,12 @@ export async function onMessageActivity(context: ActivityContext): Promise<void>
     if (context.activity.value && typeof context.activity.value === 'object') {
       const actionData = context.activity.value as Record<string, unknown>;
       if (typeof actionData.action === 'string') {
-        const responses = handleCardAction(conversationId, actionData.action);
+        const formData = {
+          name: typeof actionData.name === 'string' ? actionData.name : undefined,
+          mobile: typeof actionData.mobile === 'string' ? actionData.mobile : undefined,
+          address: typeof actionData.address === 'string' ? actionData.address : undefined,
+        };
+        const responses = handleCardAction(conversationId, actionData.action, formData);
         await sendResponses(context, responses);
         return;
       }

@@ -147,6 +147,49 @@
     }
   }
 
+  async function sendCardSubmission(actionText, formData) {
+    if (isProcessing) return;
+
+    isProcessing = true;
+    if (sendButton) sendButton.disabled = true;
+
+    const summaryText = `Submitted Details:\n• Name: ${formData.name || '—'}\n• Mobile: ${formData.mobile || '—'}\n• Address: ${formData.address || '—'}`;
+    addUserMessage(summaryText);
+
+    const typingEl = showTypingIndicator();
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversationId, action: actionText, formData }),
+      });
+
+      removeTypingIndicator(typingEl);
+
+      if (!response.ok) throw new Error('Server error');
+
+      const data = await response.json();
+      if (data.responses) {
+        let lastText = '';
+        let hasCard = false;
+        for (const msg of data.responses) {
+          if (msg.text) lastText = msg.text;
+          if (msg.adaptiveCard) hasCard = true;
+          await addBotMessage(msg.text, msg.adaptiveCard);
+        }
+        updateQuickChips(lastText, hasCard);
+      }
+    } catch (err) {
+      removeTypingIndicator(typingEl);
+      addBotMessage('We are temporarily unable to process your card submission. Please try again.', null);
+    } finally {
+      isProcessing = false;
+      if (sendButton) sendButton.disabled = false;
+      if (chatInput) chatInput.focus();
+    }
+  }
+
   // ── Message DOM Rendering ─────────────────────────────────
 
   function addUserMessage(text) {
@@ -270,7 +313,17 @@
 
         btn.addEventListener('click', function () {
           const actionText = action.data?.action || action.title;
-          sendMessage(actionText);
+          const inputFields = container.querySelectorAll('.card-input-field');
+
+          if (inputFields.length > 0 && action.data?.action === 'submit_intake_form') {
+            const formData = {};
+            inputFields.forEach(function (input) {
+              formData[input.name] = input.value.trim();
+            });
+            sendCardSubmission(actionText, formData);
+          } else {
+            sendMessage(actionText);
+          }
 
           // Disable all sibling action buttons
           const allBtns = container.querySelectorAll('.card-action-btn');
@@ -299,13 +352,43 @@
           el.className = 'card-title';
         } else if (element.color === 'Good') {
           el.className = 'card-title card-title--success';
+        } else if (element.color === 'Attention') {
+          el.className = 'card-title card-title--error';
         } else if (element.weight === 'Bolder' && !element.color) {
           el.className = 'card-question';
+        } else if (element.isSubtle) {
+          el.className = 'card-subtle-text';
         } else {
           el.className = 'card-subtitle';
         }
 
         return el;
+      }
+
+      case 'Input.Text': {
+        const group = document.createElement('div');
+        group.className = 'card-input-group';
+
+        const isMultiline = Boolean(element.isMultiline);
+        const field = isMultiline
+          ? document.createElement('textarea')
+          : document.createElement('input');
+
+        if (!isMultiline) {
+          field.type = element.id === 'mobile' ? 'tel' : 'text';
+        } else {
+          field.rows = 2;
+        }
+
+        field.className = 'card-input-field' + (isMultiline ? ' card-input-field--multiline' : '');
+        field.name = element.id;
+        field.id = 'card-field-' + element.id;
+        if (element.placeholder) field.placeholder = element.placeholder;
+        if (element.value) field.value = element.value;
+        if (element.isRequired) field.required = true;
+
+        group.appendChild(field);
+        return group;
       }
 
       case 'Container': {
@@ -401,7 +484,7 @@
       suggestions = [
         { label: 'Juan Dela Cruz', icon: '👤', fill: 'Juan Dela Cruz' },
         { label: 'Maria Santos', icon: '👤', fill: 'Maria Santos' },
-        { label: 'Alexander Tan', icon: '👤', fill: 'Alexander Tan' },
+        { label: 'Fill Form Card', icon: '📋', fill: 'Open Intake Form', primary: true },
         { label: 'Restart Flow', icon: '↺', action: 'reset-session' },
       ];
     } else if (lower.includes('mobile') || lower.includes('phone') || lower.includes('contact number') || lower.includes('09')) {
@@ -425,7 +508,7 @@
     } else {
       suggestions = [
         { label: 'Juan Dela Cruz', icon: '👤', fill: 'Juan Dela Cruz' },
-        { label: '0917 123 4567', icon: '📱', fill: '09171234567' },
+        { label: 'Fill Form Card', icon: '📋', fill: 'Open Intake Form', primary: true },
         { label: 'Start over', icon: '↺', action: 'reset-session' },
       ];
     }

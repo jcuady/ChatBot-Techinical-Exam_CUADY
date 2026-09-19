@@ -18,10 +18,17 @@ import { validateMobileNumber } from '../validation/mobile';
 import { validateName, validateAddress, sanitizeInput } from '../validation/input';
 import { createConfirmationCard } from '../cards/confirmationCard';
 import { createCompletionCard } from '../cards/completionCard';
+import { createIntakeFormCard } from '../cards/intakeCard';
 
 export interface BotResponse {
   text?: string;
   adaptiveCard?: Record<string, unknown>;
+}
+
+export interface IntakeFormData {
+  name?: string;
+  mobile?: string;
+  address?: string;
 }
 
 /** Structured log for state transitions — never includes PII. */
@@ -35,6 +42,20 @@ function logTransition(conversationId: string, from: ConversationStep, to: Conve
 function isRestartCommand(text: string): boolean {
   const lower = text.toLowerCase().trim();
   return lower === 'restart' || lower === 'start over' || lower === '/restart';
+}
+
+/** Checks if the user wants to open the interactive Adaptive Card intake form. */
+function isFormRequestCommand(text: string): boolean {
+  const lower = text.toLowerCase().trim();
+  return (
+    lower === 'form' ||
+    lower === 'open form' ||
+    lower === 'intake card' ||
+    lower === 'card form' ||
+    lower === 'fill form' ||
+    lower === 'open intake form' ||
+    lower === 'fill via interactive form'
+  );
 }
 
 /**
@@ -56,6 +77,16 @@ export function handleMessage(conversationId: string, rawText: string): BotRespo
     // eslint-disable-next-line no-console
     console.warn(`[${new Date().toISOString()}] conversation_restarted conversation=${conversationId}`);
     return [{ text: PROMPTS.RESTART }];
+  }
+
+  // Interactive Adaptive Card Form command
+  if (isFormRequestCommand(text) && state.currentStep !== ConversationStep.COMPLETE) {
+    return [
+      {
+        text: 'Here is the interactive customer intake card. You can submit your details directly using the form below:',
+        adaptiveCard: createIntakeFormCard(),
+      },
+    ];
   }
 
   switch (state.currentStep) {
@@ -179,9 +210,83 @@ function handleConfirm(conversationId: string, text: string, state: Conversation
 }
 
 /**
+ * Handles an interactive Adaptive Card Form submission (Input.Text elements).
+ * Validates all fields atomically and updates the conversation state.
+ */
+export function handleFormSubmission(conversationId: string, formData: IntakeFormData): BotResponse[] {
+  const nameInput = sanitizeInput(formData.name ?? '');
+  const mobileInput = sanitizeInput(formData.mobile ?? '');
+  const addressInput = sanitizeInput(formData.address ?? '');
+
+  const nameResult = validateName(nameInput);
+  if (!nameResult.valid) {
+    const errorMsg = nameResult.message ?? PROMPTS.INVALID_NAME;
+    return [
+      {
+        text: errorMsg,
+        adaptiveCard: createIntakeFormCard(nameInput, mobileInput, addressInput, errorMsg),
+      },
+    ];
+  }
+
+  const mobileResult = validateMobileNumber(mobileInput);
+  if (!mobileResult.valid) {
+    // eslint-disable-next-line no-console
+    console.warn(`[${new Date().toISOString()}] validation_failed conversation=${conversationId} field=mobile source=form_card`);
+    const errorMsg = mobileResult.message ?? PROMPTS.INVALID_MOBILE;
+    return [
+      {
+        text: errorMsg,
+        adaptiveCard: createIntakeFormCard(nameResult.sanitized ?? nameInput, mobileInput, addressInput, errorMsg),
+      },
+    ];
+  }
+
+  const addressResult = validateAddress(addressInput);
+  if (!addressResult.valid) {
+    const errorMsg = addressResult.message ?? PROMPTS.INVALID_ADDRESS;
+    return [
+      {
+        text: errorMsg,
+        adaptiveCard: createIntakeFormCard(nameResult.sanitized ?? nameInput, mobileResult.normalized ?? mobileInput, addressInput, errorMsg),
+      },
+    ];
+  }
+
+  // All fields valid: transition state to CONFIRM
+  const state = getState(conversationId);
+  const previousStep = state.currentStep;
+  state.userInformation.name = nameResult.sanitized;
+  state.userInformation.mobile = mobileResult.normalized;
+  state.userInformation.address = addressResult.sanitized;
+  state.currentStep = ConversationStep.CONFIRM;
+  setState(conversationId, state);
+  logTransition(conversationId, previousStep, ConversationStep.CONFIRM);
+
+  const name = nameResult.sanitized ?? '';
+  const mobile = mobileResult.normalized ?? '';
+  const address = addressResult.sanitized ?? '';
+
+  return [
+    {
+      text: PROMPTS.CONFIRM(name, mobile, address),
+      adaptiveCard: createConfirmationCard(name, mobile, address),
+    },
+  ];
+}
+
+/**
  * Handles an Adaptive Card action submission.
  * Used when the user clicks a button on a card.
  */
-export function handleCardAction(conversationId: string, action: string): BotResponse[] {
+export function handleCardAction(
+  conversationId: string,
+  action: string,
+  formData?: IntakeFormData,
+): BotResponse[] {
+  if (action === 'submit_intake_form' && formData) {
+    return handleFormSubmission(conversationId, formData);
+  }
   return handleMessage(conversationId, action);
 }
+
