@@ -3,8 +3,9 @@
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933?style=flat-square&logo=node.js)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict%20Mode-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Microsoft Agents SDK](https://img.shields.io/badge/Microsoft%20Agents%20SDK-v1.8.1-0078D4?style=flat-square&logo=microsoft)](https://github.com/microsoft/agents)
-[![Tests](https://img.shields.io/badge/Tests-68%2F68%20Passing-brightgreen?style=flat-square&logo=vitest)](https://vitest.dev/)
-[![E2E Smoke Tests](https://img.shields.io/badge/E2E-22%2F22%20Passed-brightgreen?style=flat-square)](https://dcbsd-chatbot-simulation.vercel.app)
+[![Tests](https://img.shields.io/badge/Tests-90%2F90%20Passing-brightgreen?style=flat-square&logo=vitest)](https://vitest.dev/)
+[![Microsoft Agents SDK Deep Verification](https://img.shields.io/badge/Agents%20SDK%20Verification-29%2F29%20Passed-0078D4?style=flat-square&logo=microsoft)](scripts/verify-sdk-deep.js)
+[![E2E Smoke Tests](https://img.shields.io/badge/E2E-Automated%20Passed-brightgreen?style=flat-square)](https://dcbsd-chatbot-simulation.vercel.app)
 [![Vercel Deployment](https://img.shields.io/badge/Vercel-Production%20Live-000000?style=flat-square&logo=vercel)](https://dcbsd-chatbot-simulation.vercel.app)
 [![Security Audit](https://img.shields.io/badge/Security-0%20Vulnerabilities-success?style=flat-square&logo=shield)](docs/SECURITY.md)
 
@@ -289,15 +290,20 @@ cp .env.example .env
 
 ### Available Scripts
 
-| Command | Action |
+### Available Scripts & Testing Commands
+
+| Command | Description / Target |
 |---|---|
-| `npm run dev` | Starts development server with hot-reload via `tsx watch` on port 3978 |
+| `npm test` | Executes the complete 90-test automated suite via Vitest (SDK agents, API integration, conversation, mobile, security) |
+| `npm run test:sdk` | **Deep Microsoft 365 Agents SDK verification** (`scripts/verify-sdk-deep.js`): Asserts genuine `@microsoft/agents-*` packages, `ActivityHandler`, `TurnContext`, `CardFactory`, and turn pipelines |
+| `npm run test:api` | Executes HTTP API integration tests (`tests/api-integration.test.ts`) covering `/api/health`, `/api/chat`, `/api/chat/start`, and `/api/messages` |
+| `npm run test:e2e` | Automated end-to-end regression & smoke tests across all states and endpoints |
+| `npm run test:all` | Executes full multi-suite test pipeline: Vitest unit/integration + Deep SDK verification |
+| `npm run dev` | Starts local development server with hot-reload via `tsx watch` on port 3978 |
 | `npm run build` | Compiles clean production bundle to `dist/` via `tsconfig.build.json` |
 | `npm start` | Executes compiled production bundle `node dist/index.js` |
-| `npm test` | Runs the 68-test automated unit and integration suite |
-| `npm run test:e2e` | Runs 22 end-to-end regression assertions against the target deployment |
-| `npm run typecheck` | Validates strict TypeScript compilation (`tsc --noEmit`) |
-| `npm run lint` | Analyzes code quality using ESLint |
+| `npm run typecheck` | Validates strict TypeScript compilation (`tsc --noEmit`) with 0 errors |
+| `npm run lint` | Analyzes code quality using ESLint with 0 warnings/errors |
 
 ### Testing with Bot Framework Emulator
 1. Launch **Bot Framework Emulator**.

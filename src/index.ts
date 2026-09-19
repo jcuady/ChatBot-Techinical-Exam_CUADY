@@ -12,7 +12,7 @@ import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import path from 'path';
 import { loadConfig } from './config/environment';
-import { onMessageActivity, onConversationUpdate, ActivityContext } from './agents/chatbot';
+import { processAgentActivity } from './agents/chatbot';
 import { handleMessage, BotResponse } from './conversation/flow';
 import { PROMPTS } from './conversation/prompts';
 
@@ -39,31 +39,12 @@ app.post('/api/messages', async (req: Request, res: Response) => {
   try {
     const activity = req.body;
 
-    if (!activity || typeof activity !== 'object') {
+    if (!activity || typeof activity !== 'object' || Array.isArray(activity) || Object.keys(activity).length === 0) {
       res.status(400).json({ error: 'Invalid request body' });
       return;
     }
 
-    const responses: { type: string; text?: string; attachments?: unknown[] }[] = [];
-
-    // Create a context that collects responses
-    const context: ActivityContext = {
-      activity,
-      sendActivity: async (message) => {
-        if (typeof message === 'string') {
-          responses.push({ type: 'message', text: message });
-        } else {
-          responses.push(message);
-        }
-      },
-    };
-
-    if (activity.type === 'message') {
-      await onMessageActivity(context);
-    } else if (activity.type === 'conversationUpdate') {
-      await onConversationUpdate(context);
-    }
-
+    const responses = await processAgentActivity(activity);
     res.status(200).json({ responses });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -135,8 +116,14 @@ app.get('/api/health', (_req: Request, res: Response) => {
   res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
-// Start the server (only when not running inside Vercel serverless environment)
-if (!process.env.VERCEL) {
+// Centralized error handler for malformed JSON or uncaught request errors
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((_err: unknown, _req: Request, res: Response, _next: (err?: unknown) => void) => {
+  res.status(400).json({ error: 'Invalid request payload or malformed JSON' });
+});
+
+// Start the server (only when not running inside Vercel serverless environment or during test runs)
+if (!process.env.VERCEL && process.env.NODE_ENV !== 'test') {
   app.listen(config.port, () => {
     // eslint-disable-next-line no-console
     console.warn(`
