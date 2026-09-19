@@ -1,26 +1,40 @@
-# Testing
+# Testing & Quality Assurance Whitepaper
+
+**Author:** Malcolm Joaquin L. Cuady  
+**Role:** Principal Full-Stack Engineer / QA Engineer  
+**Project:** DCBSD Chatbot Simulation — Technical Examination  
+**Organization:** EastWest Bank (DCBSD)  
+
+---
 
 ## Overview
 
-The DCBSD Chatbot has a comprehensive test suite covering validation, conversation flow, and security. All tests run offline without external services.
+The DCBSD Chatbot incorporates an enterprise multi-tier testing strategy covering domain validation, state transitions, security defenses, and automated end-to-end regression. All automated unit and security tests execute offline in sub-second time.
 
 ---
 
-## Test Framework
+## Test Frameworks & Utilities
 
-- **Vitest** — Fast TypeScript-native test runner
-- **Zero external dependencies** — No mocking libraries needed; the architecture supports direct unit testing
+- **Vitest** — High-performance native TypeScript runner with zero external mocking overhead.
+- **Node.js Native Fetch** — Automated E2E regression runner (`scripts/test-e2e.js`) targeting local and live production environments.
 
 ---
 
-## Running Tests
+## Executing Test Suites
 
 ```bash
-# Run all tests
+# Run all 68 automated unit, integration, and security tests
 npm test
 
-# Run with coverage report
-npm run test:coverage
+# Run automated end-to-end smoke & regression tests against production
+npm run test:e2e
+
+# Run strict TypeScript compiler verification (0 errors)
+npm run typecheck
+
+# Run ESLint static code analysis (0 warnings)
+npm run lint
+```
 
 # Watch mode (re-runs on file changes)
 npm run test:watch

@@ -1,6 +1,10 @@
-# Demo Script
+# Technical Demonstration Script
 
-**Target duration:** 3–5 minutes
+**Author:** Malcolm Joaquin L. Cuady  
+**Role:** Principal Full-Stack Engineer / QA Engineer  
+**Project:** DCBSD Chatbot Simulation — Technical Examination  
+**Organization:** EastWest Bank (DCBSD)  
+**Target duration:** 3–5 minutes  
 
 ---
 

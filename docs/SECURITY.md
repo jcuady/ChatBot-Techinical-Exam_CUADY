@@ -1,8 +1,15 @@
-# Security
+# Security & Data Protection Whitepaper
+
+**Author:** Malcolm Joaquin L. Cuady  
+**Role:** Principal Full-Stack Engineer / QA Engineer  
+**Project:** DCBSD Chatbot Simulation — Technical Examination  
+**Organization:** EastWest Bank (DCBSD)  
+
+---
 
 ## Overview
 
-This document describes the security controls implemented in the DCBSD Chatbot Simulation. While this is a technical examination project, it demonstrates banking-grade security awareness appropriate to the scope.
+This document describes the security controls and OWASP Top 10 mitigations implemented in the DCBSD Chatbot Simulation. While this is a technical examination project, it demonstrates banking-grade security awareness appropriate to an enterprise digital channels environment.
 
 ---
 

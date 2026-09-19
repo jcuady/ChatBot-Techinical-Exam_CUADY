@@ -1,5 +1,12 @@
 # Development Journey
 
+**Author:** Malcolm Joaquin L. Cuady  
+**Role:** Principal Full-Stack Engineer / QA Engineer  
+**Project:** DCBSD Chatbot Simulation — Technical Examination  
+**Organization:** EastWest Bank (DCBSD)  
+
+---
+
 ## Overview
 
 This document describes the actual development process for the DCBSD Chatbot Simulation, from requirement analysis through implementation, testing, and final verification.

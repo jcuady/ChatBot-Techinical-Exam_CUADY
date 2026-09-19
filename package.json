@@ -13,8 +13,15 @@
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest watch",
     "lint": "eslint src/ tests/ --ext .ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "node scripts/test-e2e.js"
   },
+  "author": "Malcolm Joaquin L. Cuady",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jcuady/ChatBot-Techinical-Exam_CUADY.git"
+  },
+  "homepage": "https://dcbsd-chatbot-simulation.vercel.app",
   "keywords": [
     "chatbot",
     "microsoft-agents-sdk",

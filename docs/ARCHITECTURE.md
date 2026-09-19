@@ -1,4 +1,11 @@
-# Architecture
+# System Architecture & Technical Specifications
+
+**Author:** Malcolm Joaquin L. Cuady  
+**Role:** Principal Full-Stack Engineer / QA Engineer  
+**Project:** DCBSD Chatbot Simulation — Technical Examination  
+**Organization:** EastWest Bank (DCBSD)  
+
+---
 
 ## Overview
 
