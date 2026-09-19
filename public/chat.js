@@ -1,12 +1,12 @@
 /**
- * DCBSD Chatbot Simulation — Client-Side Controller
- * Author: Malcolm Joaquin L. Cuady
+ * EastWest Bank — DCBSD Chatbot Client Controller
+ * Author: Malcolm Joaquin L. Cuady (Principal Full-Stack & UI/UX Design Engineer)
+ * Standards: UI/UX Pro Max • Bank-Grade Security • WCAG 2.1 AA Compliant
  *
  * Handles chat communication, deterministic state interaction,
- * live telemetry, automated QA scenario runners, and safe Adaptive Card rendering.
+ * dynamic contextual quick-suggestions, and safe Adaptive Card rendering.
  *
- * Security: All user inputs and card data are rendered via textContent
- * to prevent XSS vulnerabilities.
+ * Security: Strict XSS neutralization via textContent, zero client-exposed SDK internals.
  */
 
 (function () {
@@ -20,36 +20,17 @@
   const sendButton = document.getElementById('send-button');
   const charCount = document.getElementById('char-count');
   const resetChatBtn = document.getElementById('reset-chat-btn');
-  const qaToggleBtn = document.getElementById('qa-toggle-btn');
-  const qaModal = document.getElementById('qa-modal');
-  const qaModalClose = document.getElementById('qa-modal-close');
-  const qaModalBackdrop = document.getElementById('qa-modal-backdrop');
-  const telemetrySessionId = document.getElementById('telemetry-session-id');
-  const telemetryHealth = document.getElementById('telemetry-health');
   const toastContainer = document.getElementById('toast-container');
   const quickChips = document.getElementById('quick-chips');
-
-  // Scenario Buttons
-  const qaRunHappy = document.getElementById('qa-run-happy');
-  const qaRunMobileErr = document.getElementById('qa-run-mobile-err');
-  const qaRunReject = document.getElementById('qa-run-reject');
-  const qaRunSecurity = document.getElementById('qa-run-security');
-  const qaBtnHardReset = document.getElementById('qa-btn-hard-reset');
 
   // ── State ─────────────────────────────────────────────────
 
   let conversationId = generateConversationId();
   let isProcessing = false;
+  let isInitializing = false;
 
   function generateConversationId() {
-    return 'conv-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8);
-  }
-
-  function updateTelemetry() {
-    if (telemetrySessionId) {
-      telemetrySessionId.textContent = conversationId;
-      telemetrySessionId.title = conversationId;
-    }
+    return 'ew-sess-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8);
   }
 
   // ── Toast Notifications ───────────────────────────────────
@@ -68,19 +49,15 @@
       setTimeout(function () {
         if (toast.parentNode) toast.parentNode.removeChild(toast);
       }, 200);
-    }, 2800);
+    }, 2600);
   }
 
   // ── Session Initialization & Reset ────────────────────────
 
-  let isInitializing = false;
-
   async function initialize() {
     if (isInitializing) return;
     isInitializing = true;
-    chatMessages.innerHTML = '';
-    updateTelemetry();
-    checkApiHealth();
+    if (chatMessages) chatMessages.innerHTML = '';
 
     try {
       const response = await fetch('/api/chat/start', {
@@ -93,9 +70,14 @@
 
       const data = await response.json();
       if (data.responses) {
+        let lastText = '';
+        let hasCard = false;
         for (const msg of data.responses) {
+          if (msg.text) lastText = msg.text;
+          if (msg.adaptiveCard) hasCard = true;
           await addBotMessage(msg.text, msg.adaptiveCard);
         }
+        updateQuickChips(lastText, hasCard);
       }
     } catch (err) {
       addBotMessage('Unable to connect to the secure banking assistant. Please refresh the page.', null);
@@ -109,26 +91,12 @@
   async function resetSession(notify) {
     if (isProcessing) return;
     conversationId = generateConversationId();
-    chatMessages.innerHTML = '';
+    if (chatMessages) chatMessages.innerHTML = '';
     isInitializing = false;
-    updateTelemetry();
     if (notify !== false) {
-      showToast('Conversation reset. Starting new session.', 'info');
+      showToast('Starting a new intake session.', 'info');
     }
     await initialize();
-  }
-
-  async function checkApiHealth() {
-    try {
-      const res = await fetch('/api/health');
-      if (res.ok && telemetryHealth) {
-        telemetryHealth.innerHTML = '<span class="status-dot status-dot--online"></span> Verified (200 OK)';
-      }
-    } catch (e) {
-      if (telemetryHealth) {
-        telemetryHealth.innerHTML = '<span class="status-dot" style="background:#ef4444"></span> Offline';
-      }
-    }
   }
 
   // ── Message Sending & Processing ──────────────────────────
@@ -160,9 +128,14 @@
 
       const data = await response.json();
       if (data.responses) {
+        let lastText = '';
+        let hasCard = false;
         for (const msg of data.responses) {
+          if (msg.text) lastText = msg.text;
+          if (msg.adaptiveCard) hasCard = true;
           await addBotMessage(msg.text, msg.adaptiveCard);
         }
+        updateQuickChips(lastText, hasCard);
       }
     } catch (err) {
       removeTypingIndicator(typingEl);
@@ -177,6 +150,7 @@
   // ── Message DOM Rendering ─────────────────────────────────
 
   function addUserMessage(text) {
+    if (!chatMessages) return;
     const item = document.createElement('div');
     item.className = 'message-item message-item--user';
     item.setAttribute('role', 'listitem');
@@ -209,7 +183,8 @@
   }
 
   async function addBotMessage(text, adaptiveCard) {
-    await delay(260);
+    if (!chatMessages) return;
+    await delay(240);
 
     const item = document.createElement('div');
     item.className = 'message-item message-item--bot';
@@ -252,15 +227,16 @@
   }
 
   function renderSafeMarkdown(text) {
-    // Escape HTML entities
     const escaped = text
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
 
-    // Convert **bold** to <strong>
-    return escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Convert **bold** to <strong> and newlines to <br>
+    return escaped
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
   }
 
   // ── Adaptive Card Renderer ────────────────────────────────
@@ -377,6 +353,7 @@
   // ── Typing Indicator ──────────────────────────────────────
 
   function showTypingIndicator() {
+    if (!chatMessages) return null;
     const item = document.createElement('div');
     item.className = 'message-item message-item--bot typing-item';
 
@@ -407,6 +384,73 @@
     }
   }
 
+  // ── Dynamic Context-Aware Quick Response Suggestions ─────
+
+  function updateQuickChips(promptText, hasCard) {
+    if (!quickChips) return;
+    const lower = (promptText || '').toLowerCase();
+
+    let suggestions = [];
+
+    if (hasCard || lower.includes('confirm') || lower.includes('submit') || lower.includes('look correct') || lower.includes('collected')) {
+      suggestions = [
+        { label: 'Yes, submit', icon: '✓', fill: 'Yes, submit', primary: true },
+        { label: 'Start over', icon: '↺', fill: 'Start over', secondary: true },
+      ];
+    } else if (lower.includes('name') || lower.includes('what is your name')) {
+      suggestions = [
+        { label: 'Juan Dela Cruz', icon: '👤', fill: 'Juan Dela Cruz' },
+        { label: 'Maria Santos', icon: '👤', fill: 'Maria Santos' },
+        { label: 'Alexander Tan', icon: '👤', fill: 'Alexander Tan' },
+        { label: 'Restart Flow', icon: '↺', action: 'reset-session' },
+      ];
+    } else if (lower.includes('mobile') || lower.includes('phone') || lower.includes('contact number') || lower.includes('09')) {
+      suggestions = [
+        { label: '0917 123 4567', icon: '📱', fill: '09171234567' },
+        { label: '0918 765 4321', icon: '📱', fill: '09187654321' },
+        { label: '+63 917 123 4567', icon: '🌐', fill: '+63 917 123 4567' },
+        { label: 'Start over', icon: '↺', action: 'reset-session' },
+      ];
+    } else if (lower.includes('address') || lower.includes('residential') || lower.includes('where')) {
+      suggestions = [
+        { label: '123 Ayala Avenue, Makati City', icon: '📍', fill: '123 Ayala Avenue, Makati City' },
+        { label: 'Unit 502, BGC, Taguig City', icon: '📍', fill: 'Unit 502, BGC, Taguig City' },
+        { label: 'Ortigas Center, Pasig City', icon: '📍', fill: 'Ortigas Center, Pasig City' },
+        { label: 'Start over', icon: '↺', action: 'reset-session' },
+      ];
+    } else if (lower.includes('successfully submitted') || lower.includes('thank you') || lower.includes('completed')) {
+      suggestions = [
+        { label: 'New Application', icon: '🔄', action: 'reset-session', primary: true },
+      ];
+    } else {
+      suggestions = [
+        { label: 'Juan Dela Cruz', icon: '👤', fill: 'Juan Dela Cruz' },
+        { label: '0917 123 4567', icon: '📱', fill: '09171234567' },
+        { label: 'Start over', icon: '↺', action: 'reset-session' },
+      ];
+    }
+
+    quickChips.innerHTML = '';
+    for (const item of suggestions) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'quick-chip';
+      if (item.primary) btn.classList.add('quick-chip--primary');
+      if (item.secondary) btn.classList.add('quick-chip--secondary');
+
+      if (item.action) btn.setAttribute('data-action', item.action);
+      if (item.fill) btn.setAttribute('data-fill', item.fill);
+
+      const iconSpan = document.createElement('span');
+      iconSpan.className = 'chip-icon';
+      iconSpan.textContent = item.icon;
+
+      btn.appendChild(iconSpan);
+      btn.appendChild(document.createTextNode(' ' + item.label));
+      quickChips.appendChild(btn);
+    }
+  }
+
   // ── Helpers ───────────────────────────────────────────────
 
   function formatTime(date) {
@@ -414,7 +458,9 @@
   }
 
   function scrollToBottom() {
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    if (chatMessages) {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
   }
 
   function delay(ms) {
@@ -427,109 +473,12 @@
     charCount.textContent = len + '/1000';
   }
 
-  // ── QA Scenario Automation Runners ────────────────────────
-
-  async function runScenarioHappyPath() {
-    closeQaModal();
-    showToast('Running Scenario: Full Happy Path Intake...', 'info');
-    await resetSession(false);
-    await delay(1000);
-
-    await sendMessage('Juan Dela Cruz');
-    await delay(1200);
-
-    await sendMessage('09171234567');
-    await delay(1200);
-
-    await sendMessage('123 Ayala Avenue, Makati City');
-    await delay(1400);
-
-    await sendMessage('Yes, submit');
-    showToast('Happy Path Scenario Complete!', 'success');
-  }
-
-  async function runScenarioMobileError() {
-    closeQaModal();
-    showToast('Running Scenario: Mobile Validation & Recovery...', 'info');
-    await resetSession(false);
-    await delay(1000);
-
-    await sendMessage('Maria Santos');
-    await delay(1200);
-
-    // Invalid mobile trigger
-    await sendMessage('12345');
-    await delay(1400);
-
-    // Valid recovery trigger
-    await sendMessage('+63 918 765 4321');
-    showToast('Mobile Validation & Recovery Complete!', 'success');
-  }
-
-  async function runScenarioRejectRestart() {
-    closeQaModal();
-    showToast('Running Scenario: Rejection & State Restart...', 'info');
-    await resetSession(false);
-    await delay(1000);
-
-    await sendMessage('Roberto Gomez');
-    await delay(1200);
-
-    await sendMessage('09991234567');
-    await delay(1200);
-
-    await sendMessage('Unit 402, High Street, Taguig City');
-    await delay(1400);
-
-    // Rejection trigger
-    await sendMessage('Start over');
-    showToast('Rejection Reset Verified!', 'success');
-  }
-
-  async function runScenarioSecurity() {
-    closeQaModal();
-    showToast('Running Security Fuzz Test (SQLi & XSS)...', 'warning');
-    await resetSession(false);
-    await delay(1000);
-
-    // SQLi string as Name
-    await sendMessage("Robert'; DROP TABLE Users; --");
-    await delay(1200);
-
-    // Invalid format
-    await sendMessage("admin' OR '1'='1");
-    await delay(1400);
-
-    // Valid recovery
-    await sendMessage('09171234567');
-    await delay(1200);
-
-    // XSS string as Address
-    await sendMessage('<script>alert("XSS")</script> 123 Safe St.');
-    showToast('Security Test Complete — All Payloads Neutralized!', 'success');
-  }
-
-  // ── Modal Controls ────────────────────────────────────────
-
-  function openQaModal() {
-    if (qaModal) {
-      qaModal.setAttribute('aria-hidden', 'false');
-      checkApiHealth();
-    }
-  }
-
-  function closeQaModal() {
-    if (qaModal) {
-      qaModal.setAttribute('aria-hidden', 'true');
-    }
-  }
-
   // ── Event Bindings ────────────────────────────────────────
 
   if (chatForm) {
     chatForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      sendMessage(chatInput.value);
+      if (chatInput) sendMessage(chatInput.value);
     });
   }
 
@@ -543,25 +492,7 @@
     });
   }
 
-  if (qaToggleBtn) {
-    qaToggleBtn.addEventListener('click', openQaModal);
-  }
-
-  if (qaModalClose) {
-    qaModalClose.addEventListener('click', closeQaModal);
-  }
-
-  if (qaModalBackdrop) {
-    qaModalBackdrop.addEventListener('click', closeQaModal);
-  }
-
-  window.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && qaModal && qaModal.getAttribute('aria-hidden') === 'false') {
-      closeQaModal();
-    }
-  });
-
-  // Quick Action Chips
+  // Quick Action Chips Delegation
   if (quickChips) {
     quickChips.addEventListener('click', function (e) {
       const chip = e.target.closest('.quick-chip');
@@ -570,25 +501,13 @@
       const action = chip.getAttribute('data-action');
       const fillText = chip.getAttribute('data-fill');
 
-      if (action === 'autofill-happy') {
-        runScenarioHappyPath();
-      } else if (action === 'reset-session') {
+      if (action === 'reset-session') {
         resetSession(true);
       } else if (fillText) {
         sendMessage(fillText);
       }
     });
   }
-
-  // QA Scenario Buttons
-  if (qaRunHappy) qaRunHappy.addEventListener('click', runScenarioHappyPath);
-  if (qaRunMobileErr) qaRunMobileErr.addEventListener('click', runScenarioMobileError);
-  if (qaRunReject) qaRunReject.addEventListener('click', runScenarioRejectRestart);
-  if (qaRunSecurity) qaRunSecurity.addEventListener('click', runScenarioSecurity);
-  if (qaBtnHardReset) qaBtnHardReset.addEventListener('click', function () {
-    closeQaModal();
-    resetSession(true);
-  });
 
   // ── Launch on DOM Ready ───────────────────────────────────
 
