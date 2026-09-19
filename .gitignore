@@ -8,6 +8,10 @@ dist/
 .env
 .env.local
 .env.*.local
+*.pem
+*.key
+*.cert
+*.pfx
 
 # Test coverage
 coverage/

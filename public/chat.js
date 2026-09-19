@@ -93,7 +93,7 @@
         }
       }
     } catch (err) {
-      addBotMessage('Unable to connect to the chatbot. Please refresh the page.', null);
+      addBotMessage('Unable to connect to the secure banking assistant. Please refresh the page.', null);
     }
 
     if (chatInput) chatInput.focus();
@@ -114,11 +114,11 @@
     try {
       const res = await fetch('/api/health');
       if (res.ok && telemetryHealth) {
-        telemetryHealth.innerHTML = '<span class="status-dot status-dot--online"></span> Healthy (200 OK)';
+        telemetryHealth.innerHTML = '<span class="status-dot status-dot--online"></span> Verified (200 OK)';
       }
     } catch (e) {
       if (telemetryHealth) {
-        telemetryHealth.innerHTML = '<span class="status-dot" style="background:#ef4444"></span> Unreachable';
+        telemetryHealth.innerHTML = '<span class="status-dot" style="background:#ef4444"></span> Offline';
       }
     }
   }
@@ -158,7 +158,7 @@
       }
     } catch (err) {
       removeTypingIndicator(typingEl);
-      addBotMessage('Something went wrong processing your message. Please try again.', null);
+      addBotMessage('We are temporarily unable to process your request securely. Please try again.', null);
     } finally {
       isProcessing = false;
       if (sendButton) sendButton.disabled = false;
@@ -210,7 +210,11 @@
     const avatar = document.createElement('div');
     avatar.className = 'message-avatar message-avatar--bot';
     avatar.setAttribute('aria-hidden', 'true');
-    avatar.textContent = 'AI';
+    const avatarImg = document.createElement('img');
+    avatarImg.src = 'assets/eastwest-icon.png';
+    avatarImg.alt = 'EastWest';
+    avatarImg.className = 'avatar-brand-img';
+    avatar.appendChild(avatarImg);
 
     const body = document.createElement('div');
     body.className = 'message-body';
@@ -370,7 +374,12 @@
 
     const avatar = document.createElement('div');
     avatar.className = 'message-avatar message-avatar--bot';
-    avatar.textContent = 'AI';
+    avatar.setAttribute('aria-hidden', 'true');
+    const avatarImg = document.createElement('img');
+    avatarImg.src = 'assets/eastwest-icon.png';
+    avatarImg.alt = 'EastWest';
+    avatarImg.className = 'avatar-brand-img';
+    avatar.appendChild(avatarImg);
 
     const typingEl = document.createElement('div');
     typingEl.className = 'typing-indicator';

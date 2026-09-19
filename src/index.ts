@@ -22,6 +22,17 @@ dotenv.config();
 const config = loadConfig();
 const app = express();
 
+// Security: Disable X-Powered-By header to avoid exposing server framework internals
+app.disable('x-powered-by');
+
+// Security Headers middleware
+app.use((_req: Request, res: Response, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  next();
+});
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
