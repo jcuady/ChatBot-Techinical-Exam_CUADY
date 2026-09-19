@@ -23,7 +23,7 @@ import {
   DCBSDChatbotAgent,
   AgentsResponseAdapter,
   processAgentActivity,
-} from '../src/agents/chatbot';
+} from '../src/agents/agentSdk';
 import { clearState } from '../src/state/conversationState';
 
 describe('Microsoft 365 Agents SDK — Authentic Architecture Verification', () => {

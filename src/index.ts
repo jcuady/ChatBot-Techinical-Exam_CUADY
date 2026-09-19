@@ -12,7 +12,7 @@ import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import path from 'path';
 import { loadConfig } from './config/environment';
-import { processAgentActivity } from './agents/chatbot';
+import { onMessageActivity, onConversationUpdate, ActivityContext } from './agents/chatbot';
 import { handleMessage, BotResponse } from './conversation/flow';
 import { PROMPTS } from './conversation/prompts';
 
@@ -44,7 +44,25 @@ app.post('/api/messages', async (req: Request, res: Response) => {
       return;
     }
 
-    const responses = await processAgentActivity(activity);
+    const responses: { type: string; text?: string; attachments?: unknown[] }[] = [];
+
+    const context: ActivityContext = {
+      activity,
+      sendActivity: async (message) => {
+        if (typeof message === 'string') {
+          responses.push({ type: 'message', text: message });
+        } else {
+          responses.push(message);
+        }
+      },
+    };
+
+    if (activity.type === 'message') {
+      await onMessageActivity(context);
+    } else if (activity.type === 'conversationUpdate') {
+      await onConversationUpdate(context);
+    }
+
     res.status(200).json({ responses });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
