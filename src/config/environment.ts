@@ -13,10 +13,13 @@ export interface AppConfig {
 
 export function loadConfig(): AppConfig {
   const nodeEnv = process.env.NODE_ENV ?? 'development';
-  const portStr = process.env.PORT ?? '3978';
+  const portStr = process.env.PORT || '3978';
 
   const port = parseInt(portStr, 10);
   if (isNaN(port) || port < 1 || port > 65535) {
+    if (process.env.VERCEL) {
+      return { nodeEnv, port: 3978 };
+    }
     throw new Error(
       `Invalid PORT configuration: "${portStr}". ` +
       'PORT must be a number between 1 and 65535.'
