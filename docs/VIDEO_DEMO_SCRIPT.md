@@ -146,23 +146,40 @@
 **Duration:** ~30 seconds  
 **Visual:** Terminal running tests.
 
-> **[ON SCREEN: Switch to terminal window and run `npm run test:requirements`.]**
+> **[ACTION: Switch to terminal window and run `npm run test:requirements`.]**
 
 **🗣️ SPOKEN SCRIPT:**
 > *"Finally, to guarantee absolute correctness, I engineered an automated test suite with 160 tests covering 100% of requirements.*
 >
-> *Running `npm run test:requirements` starts an actual server and executes 67 real HTTP integration tests—zero mocks, zero simulation. As you can see on screen, all 67 requirement tests pass flawlessly."*
+> *Running `npm run test:requirements` boots an actual Express server and executes 67 real HTTP integration tests—zero mocks, zero simulation. As you can see on screen, all 67 requirement tests pass flawlessly in just over one second."*
 
-> **[ON SCREEN: Let the terminal finish with all green checkmarks.]**
+> **[ACTION: Let the terminal show all 67 passed tests.]**
 
 ---
 
-### Scene 8: Conclusion & Sign-Off
+### Scene 8: Data Security, Integrity & Enterprise Recommendations
+**Duration:** ~45 seconds  
+**Visual:** Switch back to the clean EastWest Bank chat UI or architecture diagram.
+
+**🗣️ SPOKEN SCRIPT:**
+> *"Looking at data security, integrity, and future production readiness for EastWest Bank:*
+>
+> *1. Data Integrity & Cryptography: In production, customer data should leverage AES-256 field-level encryption with Azure Key Vault HSM keys, TLS 1.3 in transit, and HMAC-SHA256 payload signing to guarantee end-to-end data integrity and non-repudiation under BSP Circular 808.*
+>
+> *2. Enterprise Recommendations for DCBSD:
+> - Distributed State: Upgrade from the in-memory Map to Azure Cosmos DB or Redis Enterprise with TTL for multi-region active-active high availability.
+> - OTP Verification: Integrate an SMS or WhatsApp OTP challenge right after mobile number intake to verify ownership before final confirmation.
+> - Core Banking Integration: Connect completed submissions into EastWest's CRM or core banking ESB via Azure Service Bus with dead-letter queueing.
+> - Omnichannel & Hybrid AI: Leverage the Agents SDK to deploy seamlessly across Microsoft Teams for internal staff and Direct Line for mobile apps, coupled with Azure OpenAI for banking FAQ fallback."*
+
+---
+
+### Scene 9: Conclusion & Sign-Off
 **Duration:** ~20 seconds  
 **Visual:** Back to the Live App / EastWest Bank Chatbot header.
 
 **🗣️ SPOKEN SCRIPT:**
-> *"All code, comprehensive test suites, and documentation are available on my public GitHub repository, and the live application is deployed on Vercel.*
+> *"All source code, comprehensive test suites, and technical documentation are available on my public GitHub repository, and the live application is deployed on Vercel.*
 >
 > *Thank you very much to the DCBSD team for this exam. I look forward to the opportunity of contributing to your chatbot and digital banking initiatives at EastWest Bank. Have a great day!"*
 
@@ -176,7 +193,8 @@
 | **2** | Conversational Intake (Happy Path) | 0:35 – 1:30 | Enter Name, Mobile, Address, Click 'Yes' |
 | **3** | Adaptive Card Intake Form | 1:30 – 2:05 | Click '📋 Open Form', submit form |
 | **4** | Validation & Error Handling | 2:05 – 2:40 | Enter invalid mobile '12345', then recover |
-| **5** | How I Built It (Tech Stack & Architecture) | 2:40 – 3:25 | Overview of TypeScript, Agents SDK, Security |
-| **6** | Obstacles & Resolutions | 3:25 – 4:15 | Agents SDK docs, Serverless, Adaptive Cards, Regex |
-| **7** | Automated Test Suite | 4:15 – 4:45 | Run `npm run test:requirements` in terminal |
-| **8** | Conclusion & Closing | 4:45 – 5:05 | Thank you & sign-off |
+| **5** | Architecture, Banking Security & Reliability | 2:40 – 3:30 | Overview of TypeScript, Agents SDK, BSP & DPA |
+| **6** | Obstacles & Resolutions | 3:30 – 4:20 | Agents SDK docs, Serverless, Adaptive Cards, Regex |
+| **7** | Automated Test Suite | 4:20 – 4:50 | Run `npm run test:requirements` in terminal |
+| **8** | Data Security, Integrity & Recommendations | 4:50 – 5:35 | Core banking, Cosmos DB, OTP, HMAC, Azure OpenAI |
+| **9** | Conclusion & Sign-Off | 5:35 – 5:55 | Thank you & sign-off |
