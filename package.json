@@ -15,7 +15,10 @@
     "test:sdk": "node scripts/verify-sdk-deep.js",
     "test:api": "vitest run tests/api-integration.test.ts",
     "test:unit": "vitest run tests/conversation.test.ts tests/mobile.test.ts tests/security.test.ts tests/validation.test.ts tests/sdk-agent.test.ts",
+    "test:requirements": "vitest run tests/requirements.test.ts",
     "test:all": "vitest run && node scripts/verify-sdk-deep.js",
+    "test:live": "node scripts/test-live-requirements.js",
+    "test:live:local": "node scripts/test-live-requirements.js http://localhost:3978",
     "lint": "eslint src/ tests/ --ext .ts",
     "typecheck": "tsc --noEmit",
     "test:e2e": "node scripts/test-e2e.js"
