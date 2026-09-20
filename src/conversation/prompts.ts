@@ -29,7 +29,7 @@ export const PROMPTS = {
 
   CONFIRM: (name: string, mobile: string, address: string): string =>
     [
-      'Thanks! Here\'s what I collected:',
+      'Your information is:',
       `**Name:**\n${name}`,
       `**Mobile:**\n${mobile}`,
       `**Address:**\n${address}`,
