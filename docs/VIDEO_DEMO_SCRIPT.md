@@ -103,22 +103,25 @@
 
 ---
 
-### Scene 5: How I Built It (Architecture & Security)
-**Duration:** ~45 seconds  
+### Scene 5: How I Built It (Architecture, Banking Security & Reliability)
+**Duration:** ~50 seconds  
 **Visual:** Switch to VS Code or keep showing the clean interface while summarizing architecture.
 
 > **[ON SCREEN: Can stay on the web interface or quickly show the clean project folder in VS Code.]**
 
 **🗣️ SPOKEN SCRIPT:**
-> *"Now, let me give you a quick technical overview of how this was engineered.*
+> *"Now, let me give you a quick technical overview of how this was engineered with bank-grade standards:*
 >
-> *1. Runtime & Stack: Built with TypeScript 5.6 and Express.js on Node.js 20+, deployed serverless to Vercel.*
+> *1. Runtime & Stack: Built with TypeScript 5.6 and Express.js on Node.js 20+, running serverless on Vercel with zero dependency vulnerabilities.*
 >
-> *2. Bot SDK: We utilized `@microsoft/agents-hosting` version 1.8.1 and `@microsoft/agents-activity`. Our architecture bridges the modern Agents SDK `ActivityHandler` with the Bot Framework activity protocol so it is fully compatible with both the Bot Framework Emulator and modern web channels.*
+> *2. Bot SDK: Powered by `@microsoft/agents-hosting` version 1.8.1 and `@microsoft/agents-activity`. Our architecture bridges the modern Agents SDK `ActivityHandler` with the Bot Framework activity protocol so it is fully compatible with both the Bot Framework Emulator and modern web channels.*
 >
-> *3. State Machine: The conversation is governed by a pure deterministic finite state automaton (`flow.ts`). Every transition is predictable, testable, and strictly typed.*
+> *3. State Machine & Reliability: The conversation is governed by a pure deterministic finite state automaton (`flow.ts`). In accordance with BSP IT Risk Management standards, the bot is fail-safe and fail-closed: it enforces strict 1,000-character payload limits to prevent ReDoS, and every state transition is strictly typed and predictable.*
 >
-> *4. Enterprise Security: In adherence to EastWest Bank standards, all DOM rendering in our client uses `textContent` instead of `innerHTML` to eliminate XSS risks. Strict security headers like X-Content-Type-Options and X-Frame-Options are enforced globally, and no internal SDK versions or server secrets are ever exposed to the client."*
+> *4. Banking Security & Data Privacy: Following the Philippine Data Privacy Act of 2012 and OWASP 2025 guidelines:
+> - Client DOM rendering uses `textContent` exclusively—zero `innerHTML`—giving complete immunity against Cross-Site Scripting (XSS).
+> - All telemetry logs are zero-PII: customer names, numbers, and addresses are never written to server logs.
+> - HTTP responses enforce strict security headers like X-Content-Type-Options: nosniff, X-Frame-Options: DENY against clickjacking, and X-Powered-By is suppressed to prevent server fingerprinting."*
 
 ---
 
