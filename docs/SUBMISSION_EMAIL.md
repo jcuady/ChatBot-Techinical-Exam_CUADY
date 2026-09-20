@@ -156,26 +156,7 @@ This dual mode gives users the choice that best fits their interaction preferenc
 
 ---
 
-## 5. Data Security, Integrity & Future Enterprise Recommendations
-
-As a Principal Full-Stack Engineer, here is how data integrity is enforced today and our strategic production roadmap for EastWest Bank / DCBSD:
-
-### Data Security & Integrity Controls
-- **Data Protection at Rest & In Transit:** TLS 1.3 encryption with forward secrecy is enforced on all HTTP connections. In enterprise production, sensitive PII (mobile and residential address) should utilize AES-256 field-level encryption with encryption keys managed in Azure Key Vault HSM.
-- **Message Integrity & Request Signing:** Activity payloads can be cryptographically verified using HMAC-SHA256 signatures to prevent tampering or replay attacks.
-- **Audit Logging & Non-Repudiation (BSP Circular 808 / 982):** In compliance with Bangko Sentral ng Pilipinas guidelines, session lifecycles produce immutable audit trails capturing transaction timestamps, anonymous conversation IDs, and status transitions without storing raw customer PII.
-- **Session Isolation & Token Lifecycle:** Short-lived tokens and randomized UUIDv4 session identifiers guarantee zero cross-talk between concurrent customer sessions.
-
-### Strategic Enterprise Recommendations for DCBSD
-1. **Distributed State Store (Azure Cosmos DB / Redis Enterprise):** Replace the single-process in-memory store with Azure Cosmos DB with multi-region replication and automatic session TTL, ensuring active-active high availability across cloud zones.
-2. **Two-Factor OTP Verification:** Introduce an automated SMS or WhatsApp OTP verification step immediately following mobile intake (via Twilio, Infobip, or local telco API) to verify customer identity prior to core banking submission.
-3. **Core Banking System (CBS) Integration:** Wire completed customer intake events into EastWest's CRM (Salesforce Financial Services Cloud / Microsoft Dynamics 365) and core banking ESB via Azure Service Bus with exponential backoff and dead-letter queues (DLQ).
-4. **Omnichannel Expansion via Microsoft Agents SDK:** Leverage the Agents SDK foundation to expose this chatbot seamlessly across internal Microsoft Teams channels for branch staff, as well as native iOS/Android mobile banking apps via Azure Direct Line.
-5. **Generative AI & Banking FAQ Fallback:** Integrate Azure OpenAI / Microsoft Copilot Studio with Retrieval-Augmented Generation (RAG) to handle unscripted customer inquiries and banking FAQs, seamlessly routing back to the deterministic state machine when transactional intake is requested.
-
----
-
-## 6. Test Suite Commands Reference
+## 5. Test Suite Commands Reference
 
 ```bash
 # Run all unit + integration tests (93 tests)
@@ -199,7 +180,7 @@ npm run test:all
 
 ---
 
-## 7. Repository Structure Summary
+## 6. Repository Structure Summary
 
 ```
 .
@@ -235,6 +216,29 @@ npm run test:all
     ├── test-e2e.js               # E2E integration runner
     └── verify-sdk-deep.js        # SDK authenticity verifier
 ```
+
+---
+
+## 7. Future Roadmap: Enterprise Banking Enhancements & Data Security Architecture
+
+As a Principal Full-Stack Engineer evaluating the production path for EastWest Bank / DCBSD, the following architectural upgrades would elevate this chatbot into an enterprise-grade digital banking asset:
+
+### 1. Enterprise Data Security & Cryptographic Integrity (At Rest & In Transit)
+- **Azure Key Vault & Cosmos DB Integration:** Transition ephemeral state to Azure Cosmos DB with Customer-Managed Keys (CMK). Customer PII (Name, Mobile, Address) encrypted at the application layer with AES-256-GCM before storage.
+- **Mutual TLS (mTLS) & HMAC Signing:** Secure core banking integration with mTLS certificates and SHA-256 HMAC payload signatures between the bot middleware and internal DCBSD microservices.
+- **Immutable Audit Logging (BSP Circular 982):** Stream security and transaction events to Azure Confidential Ledger or an immutable WORM (Write Once, Read Many) SIEM for regulatory audits.
+
+### 2. Digital eKYC & Biometric Verification
+- **PhilSys (National ID) OCR & Liveness:** Utilize computer vision within Adaptive Cards to capture Philippine IDs, parse details via OCR, and perform passive facial liveness checks.
+- **Automated AML/CFT Screening:** Integrate real-time background screening against AMLC (Anti-Money Laundering Council) watchlists before account creation.
+
+### 3. Core Banking & Omnichannel Orchestration
+- **Open Banking APIs:** Integrate with EastWest Core Banking for balance inquiries, credit card activations, transaction dispute filing, and InstaPay/PESONet transfers via OAuth 2.0 / OpenID Connect with Step-Up OTP authentication.
+- **Unified Omnichannel Presence:** Leverage the Microsoft Agents SDK channel adapters to deploy the identical bot logic across Web Chat, Microsoft Teams (internal DCBSD support), Viber, and the EastWest Mobile Banking App with synchronized user context.
+
+### 4. Enterprise RAG with Guardrails & Live Agent Escalation
+- **Azure OpenAI + Semantic Kernel RAG:** Ground conversational answers in verified EastWest Bank knowledge bases (loan interest rates, branch locators, banking policies) protected by NeMo Guardrails to eliminate hallucinations or financial misinformation.
+- **Context-Aware Human-Agent Handoff:** Automatic routing to contact center agents (Genesys / Dynamics 365) with the full conversation transcript and sentiment score when complex escalation is detected.
 
 ---
 
