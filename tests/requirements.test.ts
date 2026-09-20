@@ -25,6 +25,8 @@
 
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import http from 'http';
+import * as fs from 'fs';
+import * as path from 'path';
 import app from '../src/index';
 
 // Set global timeout to 30s for SDK package imports which may take >5s
@@ -176,9 +178,10 @@ describe('R-02 - Microsoft 365 Agents SDK Authentic Package Verification', () =>
     expect(typeof handler.onTurn).toBe('function');
   });
 
-  it('package.json lists all three SDK packages with pinned semver', async () => {
-    const pkg = await import('../package.json', { assert: { type: 'json' } });
-    const deps = pkg.default.dependencies as Record<string, string>;
+  it('package.json lists all three SDK packages with pinned semver', () => {
+    const pkgPath = path.resolve(__dirname, '../package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    const deps = pkg.dependencies as Record<string, string>;
     expect(deps['@microsoft/agents-hosting']).toMatch(/^\^?\d+\.\d+\.\d+/);
     expect(deps['@microsoft/agents-activity']).toMatch(/^\^?\d+\.\d+\.\d+/);
     expect(deps['@microsoft/agents-hosting-express']).toMatch(/^\^?\d+\.\d+\.\d+/);
