@@ -20,8 +20,8 @@
   const sendButton = document.getElementById('send-button');
   const charCount = document.getElementById('char-count');
   const resetChatBtn = document.getElementById('reset-chat-btn');
+  const openFormBtn = document.getElementById('open-form-btn');
   const toastContainer = document.getElementById('toast-container');
-  const quickChips = document.getElementById('quick-chips');
 
   // ── State ─────────────────────────────────────────────────
 
@@ -77,7 +77,6 @@
           if (msg.adaptiveCard) hasCard = true;
           await addBotMessage(msg.text, msg.adaptiveCard);
         }
-        updateQuickChips(lastText, hasCard);
       }
     } catch (err) {
       addBotMessage('Unable to connect to the secure banking assistant. Please refresh the page.', null);
@@ -135,7 +134,6 @@
           if (msg.adaptiveCard) hasCard = true;
           await addBotMessage(msg.text, msg.adaptiveCard);
         }
-        updateQuickChips(lastText, hasCard);
       }
     } catch (err) {
       removeTypingIndicator(typingEl);
@@ -178,7 +176,6 @@
           if (msg.adaptiveCard) hasCard = true;
           await addBotMessage(msg.text, msg.adaptiveCard);
         }
-        updateQuickChips(lastText, hasCard);
       }
     } catch (err) {
       removeTypingIndicator(typingEl);
@@ -467,72 +464,7 @@
     }
   }
 
-  // ── Dynamic Context-Aware Quick Response Suggestions ─────
 
-  function updateQuickChips(promptText, hasCard) {
-    if (!quickChips) return;
-    const lower = (promptText || '').toLowerCase();
-
-    let suggestions = [];
-
-    if (hasCard || lower.includes('confirm') || lower.includes('submit') || lower.includes('look correct') || lower.includes('collected')) {
-      suggestions = [
-        { label: 'Yes, submit', icon: '✓', fill: 'Yes, submit', primary: true },
-        { label: 'Start over', icon: '↺', fill: 'Start over', secondary: true },
-      ];
-    } else if (lower.includes('name') || lower.includes('what is your name')) {
-      suggestions = [
-        { label: 'Juan Dela Cruz', icon: '👤', fill: 'Juan Dela Cruz' },
-        { label: 'Maria Santos', icon: '👤', fill: 'Maria Santos' },
-        { label: 'Fill Form Card', icon: '📋', fill: 'Open Intake Form', primary: true },
-        { label: 'Restart Flow', icon: '↺', action: 'reset-session' },
-      ];
-    } else if (lower.includes('mobile') || lower.includes('phone') || lower.includes('contact number') || lower.includes('09')) {
-      suggestions = [
-        { label: '0917 123 4567', icon: '📱', fill: '09171234567' },
-        { label: '0918 765 4321', icon: '📱', fill: '09187654321' },
-        { label: '+63 917 123 4567', icon: '🌐', fill: '+63 917 123 4567' },
-        { label: 'Start over', icon: '↺', action: 'reset-session' },
-      ];
-    } else if (lower.includes('address') || lower.includes('residential') || lower.includes('where')) {
-      suggestions = [
-        { label: '123 Ayala Avenue, Makati City', icon: '📍', fill: '123 Ayala Avenue, Makati City' },
-        { label: 'Unit 502, BGC, Taguig City', icon: '📍', fill: 'Unit 502, BGC, Taguig City' },
-        { label: 'Ortigas Center, Pasig City', icon: '📍', fill: 'Ortigas Center, Pasig City' },
-        { label: 'Start over', icon: '↺', action: 'reset-session' },
-      ];
-    } else if (lower.includes('successfully submitted') || lower.includes('thank you') || lower.includes('completed')) {
-      suggestions = [
-        { label: 'New Application', icon: '🔄', action: 'reset-session', primary: true },
-      ];
-    } else {
-      suggestions = [
-        { label: 'Juan Dela Cruz', icon: '👤', fill: 'Juan Dela Cruz' },
-        { label: 'Fill Form Card', icon: '📋', fill: 'Open Intake Form', primary: true },
-        { label: 'Start over', icon: '↺', action: 'reset-session' },
-      ];
-    }
-
-    quickChips.innerHTML = '';
-    for (const item of suggestions) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'quick-chip';
-      if (item.primary) btn.classList.add('quick-chip--primary');
-      if (item.secondary) btn.classList.add('quick-chip--secondary');
-
-      if (item.action) btn.setAttribute('data-action', item.action);
-      if (item.fill) btn.setAttribute('data-fill', item.fill);
-
-      const iconSpan = document.createElement('span');
-      iconSpan.className = 'chip-icon';
-      iconSpan.textContent = item.icon;
-
-      btn.appendChild(iconSpan);
-      btn.appendChild(document.createTextNode(' ' + item.label));
-      quickChips.appendChild(btn);
-    }
-  }
 
   // ── Helpers ───────────────────────────────────────────────
 
@@ -575,20 +507,9 @@
     });
   }
 
-  // Quick Action Chips Delegation
-  if (quickChips) {
-    quickChips.addEventListener('click', function (e) {
-      const chip = e.target.closest('.quick-chip');
-      if (!chip) return;
-
-      const action = chip.getAttribute('data-action');
-      const fillText = chip.getAttribute('data-fill');
-
-      if (action === 'reset-session') {
-        resetSession(true);
-      } else if (fillText) {
-        sendMessage(fillText);
-      }
+  if (openFormBtn) {
+    openFormBtn.addEventListener('click', function () {
+      sendMessage('Open Intake Form');
     });
   }
 

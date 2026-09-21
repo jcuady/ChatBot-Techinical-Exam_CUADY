@@ -70,16 +70,15 @@
 
 ---
 
-### Scene 3: Bonus — All-in-One Adaptive Card Form Mode
-**Duration:** ~35 seconds  
-**Visual:** Resetting and clicking "Open Form" quick action button.
+### Scene 3: Bonus — Adaptive Card Form Mode (1:30 – 2:05)
+**Visual:** Clicking the "Intake Form" button in the top header.
 
-> **[ON SCREEN: Click the top-right 'Reset' / 'New Chat' button, then click the '📋 Open Form' quick action chip.]**
+> **[ACTION: Click the 'Intake Form' button in the top header, or type 'open form'.]**
 
 **🗣️ SPOKEN SCRIPT:**
-> *"In addition to the step-by-step chat, I also implemented an all-in-one intake method using Microsoft Adaptive Cards Input.Text components.*
+> *"In addition to the step-by-step conversational flow, I also implemented an all-in-one intake method using Microsoft Adaptive Cards Input.Text components.*
 >
-> *When a user or client prefers batch data entry, they can open the Adaptive Intake Card. Here, all three fields — Full Name, Philippine Mobile, and Address — are presented in a unified card with native schema validation.*
+> *When a client prefers batch data entry, they can open the Adaptive Intake Card directly by clicking the 'Intake Form' button in the header, or simply by typing 'open form'. Here, all three fields — Full Name, Philippine Mobile, and Address — are presented in a unified card with native schema validation.*
 >
 > *Submitting this form immediately feeds into our validation pipeline and generates the same verified confirmation summary."*
 
