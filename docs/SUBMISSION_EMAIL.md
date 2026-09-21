@@ -10,20 +10,21 @@
 
 ---
 
-Dear DCBSD Team,
+Dear Mr. Julius,
 
-Thank you for the opportunity to participate in the technical examination. Please find attached the video demonstration of my chatbot implementation, along with a brief summary of my development journey, technical decisions, and obstacles I encountered along the way.
+Thank you for taking the time to speak with me during our interview. I truly enjoyed learning more about the team's ongoing initiatives at DCBSD and EastWest Bank.
+
+As requested, I have completed the technical assessment ahead of the September 22 deadline. Below is my formal submission, including the video demonstration link, live cloud deployment, GitHub repository, technical implementation details, and the obstacles encountered along with their resolutions.
 
 ---
 
-## 1. Project Overview
+### 🔗 Key Submission Links
 
-I built a **deterministic conversational intake chatbot** designed for DCBSD's internal use case, implementing both the **Microsoft Bot Framework SDK v4 protocol** and the newer **Microsoft 365 Agents SDK** (as the preferred option outlined in the exam brief).
-
-The bot collects three pieces of information from users — their **name**, **Philippine mobile number**, and **home address** — and presents a confirmation summary before final submission.
-
-**Live Deployment:** https://dcbsd-chatbot-simulation.vercel.app
-**Repository:** https://github.com/jcuady/ChatBot-Techinical-Exam_CUADY
+| Deliverable | URL |
+|---|---|
+| 🎬 **Video Demonstration** | https://drive.google.com/file/d/1Ipnl3D17Ji8L5cnemuwSiSpTZt5TmMkw/view?usp=sharing |
+| 🌐 **Live Cloud Deployment** | https://dcbsd-chatbot-simulation.vercel.app/ |
+| 💻 **GitHub Repository** | https://github.com/jcuady/ChatBot-Techinical-Exam_CUADY |
 
 ---
 
