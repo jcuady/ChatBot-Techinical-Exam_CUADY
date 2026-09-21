@@ -244,7 +244,7 @@ async function runAll() {
 
   await check('R-04c: Mobile stored as E.164 (+63...) format in summary', async () => {
     const cid = uid('e164');
-    await chat(cid, 'E164 User');
+    await chat(cid, 'Enrique Santos');
     await chat(cid, '09201234567');
     const { data } = await chat(cid, 'Test City');
     assert(data.responses[0].text.includes('+639201234567'),
