@@ -1,205 +1,183 @@
 # DCBSD Chatbot Technical Examination — Master Video Demonstration Script
-**Candidate:** Malcolm Joaquin L. Cuady  
-**Evaluation:** DCBSD Chatbot Technical Examination (EastWest Bank)  
-**Tone:** Confident, professional, clear, and natural (human-to-human)  
-**Target Time:** ~4 to 5 minutes  
-**Live Demo:** [https://dcbsd-chatbot-simulation.vercel.app](https://dcbsd-chatbot-simulation.vercel.app)  
+**Author & Presenter:** Malcolm Joaquin L. Cuady  
+**Project:** DCBSD Customer Intake Chatbot (EastWest Bank)  
+**Tone:** Professional, conversational, natural, and confident (Spoken dialogue)  
+**Target Duration:** ~4 to 5 minutes  
+**Live Target URL:** [https://dcbsd-chatbot-simulation.vercel.app](https://dcbsd-chatbot-simulation.vercel.app)  
 
 ---
 
-## 🎧 Quick Setup Before Recording
-
-1. **Browser:** Open [https://dcbsd-chatbot-simulation.vercel.app](https://dcbsd-chatbot-simulation.vercel.app) in Chrome/Edge.
-2. **Terminal:** Have your terminal open in the project folder with this command typed and ready:  
-   `npm run test:requirements`
-3. **Pacing Tip:** Take a breath between scenes. Speak at a steady, natural conversational pace.
+## 💡 Quick Tips for Your Recording
+* **Tool:** Use OBS Studio, Loom, or Windows Game Bar (`Win + G`).
+* **Format:** Full screen with your browser showing the live deployed chatbot, and terminal ready in background.
+* **Delivery:** Speak naturally, like you're walking a fellow tech lead through your project over coffee or Zoom.
 
 ---
 
-## 🎬 Master Teleprompter Script (Word-for-Word)
+# 🎬 The Complete Spoken Teleprompter Script
 
 ---
 
-### Scene 1: Introduction & The Sidenote Choice
-⏱️ **Time:** ~40 seconds  
-🖥️ **On Screen:** Showing the EastWest Bank branded chat portal with the "Secure Portal" badge.
+### Part 1: Welcome & The Project Journey (0:00 – 0:45)
+**On Screen:** Full view of the live EastWest Bank branded chatbot at `dcbsd-chatbot-simulation.vercel.app`.
 
-> **[ACTION: Have the live web portal on screen. Mouse cursor idle.]**
+> **[ACTION: Open the browser to the live app. Hover gently over the EastWest logo and the "Secure Portal" badge.]**
 
 **🗣️ WHAT TO SAY:**
-> *"Hi everyone! Good day to the DCBSD technical evaluation team at EastWest Bank. My name is Malcolm Joaquin Cuady, and today I’m excited to present my video walkthrough for the DCBSD Chatbot Technical Examination.*
+> *"Hi everyone! Good day to the DCBSD technical evaluation team at EastWest Bank. My name is Malcolm Joaquin Cuady, and today I’m excited to walk you through my technical exam submission: our DCBSD Customer Intake Chatbot.*
 >
-> *The goal here was to build a clean, reliable, and secure chatbot that gathers three customer data points—Name, Philippine Mobile Number, and Address—validates them properly, and reflects that information back to the user.*
+> *The core goal was to build a responsive, robust chatbot that collects a customer's Name, Philippine Mobile Number, and Address, validates them, and summarizes them back to the user.*
 >
-> *Now, the brief mentioned Azure’s Bot Framework SDK v4, but it included a specific sidenote expressing a preference for Microsoft’s newer Agents SDK. Taking that recommendation to heart, I engineered this chatbot natively using the modern Microsoft 365 Agents SDK, while ensuring 100% protocol compatibility with SDK v4 and the Bot Framework Emulator, along with Microsoft Adaptive Cards.*
+> *Now, the brief mentioned Azure's Bot Framework SDK v4, but had a very interesting sidenote: you preferred exploring the newer Microsoft 365 Agents SDK because that’s where DCBSD is heading. I took that challenge to heart! I engineered this solution natively with the modern Microsoft 365 Agents SDK, while keeping it 100% compatible with the Bot Framework SDK v4 protocol and the Bot Framework Emulator.*
 >
-> *Let me take you through a live demonstration of how it works, how it’s built, and how we applied bank-grade security throughout the system."*
+> *I also want to share that this was an AI-assisted engineering journey. I paired with advanced AI as an architectural co-pilot to research undocumented SDK internals, stress-test security edge cases, and build a massive test suite. Let me show you how it all came together."*
 
 ---
 
-### Scene 2: Live Demo — Conversational Flow (Happy Path)
-⏱️ **Time:** ~55 seconds  
-🖥️ **On Screen:** Interacting with the chatbox.
+### Part 2: Live Demo — Conversational Intake Flow (0:45 – 1:40)
+**On Screen:** Interacting with the chat interface.
 
-> **[ACTION: Click the message box at the bottom.]**
+> **[ACTION: Click the chat input field at the bottom.]**
 
 **🗣️ WHAT TO SAY:**
-> *"First, let’s look at the conversational experience. The chat runs on a deterministic finite state machine, so every transition is predictable and controlled.*
+> *"Let’s start with the live conversational experience. Our chatbot runs on a deterministic finite state machine, meaning every step is strictly controlled and predictable.*
 >
-> *The bot starts by introducing itself and asking for my full name."*
+> *The bot greets the user and asks for their full name."*
 
-> **[ACTION: Type `Malcolm Cuady` and press Enter.]**
+> **[ACTION: Type `Malcolm Cuady` and hit Enter.]**
 
 **🗣️ WHAT TO SAY:**
-> *"It greets me personally—'Nice to meet you, Malcolm Cuady'—and transitions cleanly to asking for my Philippine mobile number.*
+> *"It catches the name, greets me personally—'Nice to meet you, Malcolm Cuady!'—and advances to the next step, asking for my mobile number.*
 >
-> *Under the hood, we built a dedicated Philippine mobile validator that accepts 09, +63, or 63 formats, and automatically normalizes them into the international E.164 banking standard."*
+> *Here, our backend runs strict Philippine mobile validation. It accepts local formats like 09, +639, or spaces and dashes, and automatically normalizes it to the international E.164 standard."*
 
-> **[ACTION: Type `09171234567` and press Enter.]**
-
-**🗣️ WHAT TO SAY:**
-> *"The number is verified, and the bot asks for my address."*
-
-> **[ACTION: Type `EastWest Corporate Center, The Fort, BGC, Taguig City` and press Enter.]**
+> **[ACTION: Type `09171234567` and hit Enter.]**
 
 **🗣️ WHAT TO SAY:**
-> *"Now, for the confirmation step: to fulfill the bonus requirement, rather than just returning plain text, the bot renders an official Microsoft Adaptive Card.*
+> *"That was accepted and normalized. Now it asks for my residential or business address."*
+
+> **[ACTION: Type `EastWest Corporate Center, The Fort, BGC, Taguig City` and hit Enter.]**
+
+**🗣️ WHAT TO SAY:**
+> *"And here is the confirmation step! As part of the bonus requirement, we integrated Microsoft Adaptive Cards schema version 1.5.*
 >
-> *You can see a clean FactSet presenting the Name, the Normalized Mobile (+639171234567), and the Address, complete with interactive Action.Submit buttons.*
+> *Instead of plain raw text, look at this clean Adaptive Card. It uses a structured FactSet showing the Name, Normalized Mobile (+639171234567), and Address, with interactive Action.Submit buttons.*
 >
 > *Let’s confirm by clicking 'Yes, submit'."*
 
-> **[ACTION: Click the green 'Yes, submit' button on the card.]**
+> **[ACTION: Click the green 'Yes, submit' button on the Adaptive Card.]**
 
 **🗣️ WHAT TO SAY:**
-> *"Once clicked, the bot returns a Completion Card confirming that the intake record has been submitted securely."*
+> *"Once submitted, the bot instantly serves our final Adaptive Completion Card, confirming successful registration with green brand accents and closing the intake session safely."*
 
 ---
 
-### Scene 3: Bonus — All-in-One Adaptive Card Form
-⏱️ **Time:** ~35 seconds  
-🖥️ **On Screen:** Showing the top header button.
+### Part 3: Bonus Feature — All-in-One Adaptive Card Form Mode (1:40 – 2:20)
+**On Screen:** Triggering the interactive form card.
 
-> **[ACTION: Click the 'Intake Form' button in the top-right header.]**
+> **[ACTION: Click the 'Intake Form' button in the top header, or type `open form` into the chat box.]**
 
 **🗣️ WHAT TO SAY:**
-> *"In addition to the conversational chat, I also implemented an all-in-one form mode using Microsoft Adaptive Cards.*
+> *"Now, in Image 1 of the exam instructions, the prompt highlighted the Adaptive Cards Designer at adaptivecards.io with `Input.Text` elements. I wanted to fulfill that bonus in a truly useful way.*
 >
-> *In Image 1 of the exam instructions, you shared a screenshot of the Adaptive Cards Designer featuring `Input.Text` elements. To implement that directly, clicking the 'Intake Form' button in the header—or simply typing 'open form'—renders this interactive intake card.*
+> *If a customer prefers batch data entry instead of chatting back and forth, they can click 'Intake Form' in the header or type 'open form'.*
 >
-> *It presents all three fields in one place with native schema validation. When submitted, it routes straight into our validation pipeline and takes the user right to the verified confirmation card."*
+> *This renders an all-in-one Adaptive Card with native Input.Text components for Name, Mobile, and Address. It has built-in required field validation. When submitted, it feeds directly into the same validation engine and routes straight to confirmation. You get dual-mode flexibility out of the box!"*
 
 ---
 
-### Scene 4: Validation, Error Recovery & Clean Banking UI
-⏱️ **Time:** ~40 seconds  
-🖥️ **On Screen:** Testing bad input and recovering.
+### Part 4: Validation & The Banking UI Decision (2:20 – 3:05)
+**On Screen:** Demonstrating error handling and UI polish.
 
-> **[ACTION: Click 'New Session' in the header. Type `Juan Dela Cruz`, press Enter. Then type `12345` and press Enter.]**
-
-**🗣️ WHAT TO SAY:**
-> *"In banking systems, reliability and data hygiene are essential. Let’s see what happens when bad data is entered.*
->
-> *If a user enters an invalid number like '12345', the bot immediately catches it: 'That doesn't look like a valid Philippine mobile number,' and gives clear examples like 0917 or +63.*
->
-> *Notice that the application doesn't crash or lose state. The user remains safely at the mobile step until valid input is provided."*
-
-> **[ACTION: Type `09289876543` and press Enter.]**
+> **[ACTION: Click 'New Session' in the top header, type `Juan Dela Cruz` for name, hit Enter. Then type `12345` for mobile and hit Enter.]**
 
 **🗣️ WHAT TO SAY:**
-> *"Once a valid number is supplied, it resumes seamlessly.*
+> *"In digital banking, reliability and edge-case handling are paramount. Let's see what happens with invalid input.*
 >
-> *You’ll also notice that we keep the interface clean and distraction-free: no casual suggestion chips that could confuse banking clients into thinking canned samples are real account data."*
+> *If I type '12345', the bot immediately catches it: 'That doesn't look like a valid Philippine mobile number. Please enter an 11-digit mobile number, for example: 09171234567.'*
+>
+> *Notice that the application doesn't crash or drop the session. The state machine holds you safely at the mobile step until valid data is provided."*
+
+> **[ACTION: Type `09289876543` and hit Enter.]**
+
+**🗣️ WHAT TO SAY:**
+> *"Enter a valid number, and it recovers immediately.*
+>
+> *You might also notice the interface itself: we deliberately removed generic 'quick suggestion' chips. In a real banking portal, having fake preset names or numbers above the keyboard looks unprofessional and could confuse real clients into thinking someone else's data was cached. We kept it clean, focused, and bank-grade."*
 
 ---
 
-### Scene 5: How I Built It — SDK v4, Agents SDK & The CIA Triad
-⏱️ **Time:** ~60 seconds  
-🖥️ **On Screen:** Web portal or brief glance at VS Code (`src/bot/agentsHandler.ts`).
-
-> **[ACTION: Stay on web portal or display `src/bot/agentsHandler.ts` in VS Code.]**
+### Part 5: Security Architecture & The CIA Triad (3:05 – 3:55)
+**On Screen:** Can remain on the chat screen or briefly show `src/index.ts` in VS Code.
 
 **🗣️ WHAT TO SAY:**
-> *"Now, let’s talk about how this was engineered from a full-stack and security perspective.*
+> *"Because EastWest is a financial institution, bank-grade security and the CIA Triad were engineered into every layer:*
 >
-> *1. Framework & SDKs:*
-> *To balance DCBSD’s current SDK v4 infrastructure with your long-term Agents SDK preference, I built an adapter layer in `src/bot/agentsHandler.ts` using `@microsoft/agents-hosting` version 1.8.1 and `@microsoft/agents-activity`.*
-> *We subclassed the Agents SDK `ActivityHandler`, handling `onMembersAdded` for initial onboarding and `onMessage` for conversation turns. Simultaneously, our `/api/messages` endpoint accepts standard Bot Framework Activity payloads, making it fully compatible with the Bot Framework Emulator.*
+> *1. Confidentiality: Under the Philippine Data Privacy Act of 2012 and BSP Circular 808, customer PII must never leak into logs. In our codebase, telemetry logs only record state transitions and session IDs—never customer names, numbers, or addresses. Furthermore, sessions are strictly isolated per unique conversation ID.*
 >
-> *2. Bank Security & The CIA Triad:*
-> *Working in a banking context, I designed this following the CIA Triad and BSP Circular 808 standards:*
+> *2. Integrity: We have complete immunity against Cross-Site Scripting (XSS). In our front-end, all dynamic content is rendered using DOM `textContent`—zero `innerHTML`. If an attacker inputs script tags or image onerror vectors, they are neutralized as harmless text. In addition, names are sanitized with Unicode whitelisting, and mobile numbers are normalized to E.164.*
 >
-> *- Confidentiality: In line with the Philippine Data Privacy Act of 2012, zero customer PII is stored in console logs or telemetry. We only log state transition events, never names, mobile numbers, or addresses. Furthermore, sessions are strictly isolated so users can never see each other's data.*
->
-> *- Integrity: Complete XSS immunity. In our client code, all rendering uses DOM `textContent` instead of `innerHTML`. Malicious script tags or image injection vectors are treated as plain, harmless text.*
->
-> *- Availability: We implemented a 1,000-character payload ceiling to guard against ReDoS and buffer exhaustion attacks, and configured hardened security headers—like `X-Frame-Options: DENY` against clickjacking and removing `X-Powered-By` to prevent server fingerprinting."*
+> *3. Availability: To prevent Regular Expression Denial of Service (ReDoS) or memory exhaustion, we enforce a strict 1,000-character payload ceiling. The server runs with hardened security headers like `X-Frame-Options: DENY` against clickjacking, `X-Content-Type-Options: nosniff`, and suppressed `X-Powered-By` headers."*
 
 ---
 
-### Scene 6: Obstacles & Resolutions
-⏱️ **Time:** ~50 seconds  
-🖥️ **On Screen:** Natural, confident delivery.
+### Part 6: How the SDKs Work & Our AI-Assisted Journey (3:55 – 4:45)
+**On Screen:** Show `src/bot/agentsHandler.ts` or stay on the clean web app.
 
 **🗣️ WHAT TO SAY:**
-> *"During the build, I encountered five main obstacles:*
+> *"Now, how did we bridge Azure's Bot Framework SDK v4 with the newer Agents SDK, and what was our journey?*
 >
-> *First, the Agents SDK Documentation Gap: Because the Agents SDK is relatively new, there are fewer community examples than SDK v4. I resolved this by reviewing Microsoft's open-source TypeScript source code and test files directly at `microsoft/agents`, which gave me the exact patterns to build our `DCBSDAgentHandler`.*
+> *The challenge was that the Microsoft 365 Agents SDK (`@microsoft/agents-hosting` and `@microsoft/agents-activity`) is cutting-edge, with very few public tutorials compared to the older SDK v4. This is where AI pair-programming became an incredible force multiplier.*
 >
-> *Second, Serverless Statelessness on Vercel: Standard bot frameworks often assume persistent memory. On Vercel, serverless instances can be ephemeral. I solved this by decoupling the state store with client-side conversation continuity, designing it so that dropping in Azure Cosmos DB or Redis for full production is seamless.*
+> *I used AI to rapidly explore and dissect the TypeScript type definitions and unit tests inside Microsoft’s open-source `microsoft/agents` GitHub repository. Together, we designed an abstraction bridge in `src/bot/agentsHandler.ts`.*
 >
-> *Third, Adaptive Cards Schema Pinning: Different platforms render cards differently. Pinned all cards to schema version 1.5 and wrote a safe native renderer for the web client.*
+> *We subclassed the Agents SDK `ActivityHandler` to manage turn lifecycles—like `onMembersAdded` for welcome events and `onMessage` for chat routing. Then, we wired our Express endpoint at `/api/messages` to deserialize incoming Bot Framework Activity JSON packets. This gave us the best of both worlds: full compatibility with the classic Bot Framework Emulator, while running on Microsoft’s future-proof Agents SDK!*
 >
-> *Fourth, Philippine Name Nuances: Strict alphabetical rules often break on legitimate cultural names with hyphens, apostrophes, or middle initials like 'Maria Del Rosario-Cruz' or 'Juan D. Dela Cruz'. I solved this using Unicode-aware regular expressions (`\p{L}`) that support valid Philippine names while strictly blocking HTML injection.*
->
-> *And fifth, Digit Isolation in Names: During QA, we confirmed that inputs containing numbers were correctly flagged by the name validator, ensuring high data hygiene before anything touches core banking systems."*
+> *We also used AI to stress-test cultural edge cases—like Filipino names with hyphens or apostrophes such as 'Maria Del Rosario-Cruz'—and to verify that test names with numbers were appropriately flagged."*
 
 ---
 
-### Scene 7: Automated Test Suite (Real Proof)
-⏱️ **Time:** ~30 seconds  
-🖥️ **On Screen:** Terminal window.
+### Part 7: Real Verification — 160 Automated Tests (4:45 – 5:20)
+**On Screen:** Switch to the terminal and execute the test command.
 
-> **[ACTION: Switch to your terminal window. Run `npm run test:requirements`.]**
+> **[ACTION: Open the terminal window and run: `npm run test:requirements`.]**
 
 **🗣️ WHAT TO SAY:**
-> *"To verify every requirement without mocks or dummy shortcuts, I built an automated suite of 160 tests.*
+> *"To ensure there is zero simulation or fake data, I built a comprehensive test suite of 160 automated tests.*
 >
-> *Running `npm run test:requirements` boots a live local Express server and fires 67 real HTTP integration tests covering all requirements from R-01 to R-16.*
+> *Let's run `npm run test:requirements`. This boots an actual Express server and executes 67 real HTTP integration tests covering all requirements from R-01 to R-16.*
 >
-> *As you can see live on the terminal, all 67 requirement tests pass cleanly in just about one second."*
+> *As you can see live on my screen, all 67 requirement tests pass with zero failures in just over one second."*
 
-> **[ACTION: Let the terminal show all green checkmarks.]**
+> **[ACTION: Let the terminal finish showing `✓ tests/requirements.test.ts (67 tests) passed`.]**
 
 ---
 
-### Scene 8: Future Roadmap & Closing
-⏱️ **Time:** ~35 seconds  
-🖥️ **On Screen:** Switch back to the live web portal.
-
-> **[ACTION: Switch back to the web portal showing the EastWest Bank header.]**
+### Part 8: Future Banking Vision & Conclusion (5:20 – 5:50)
+**On Screen:** Switch back to the live web interface.
 
 **🗣️ WHAT TO SAY:**
-> *"Looking ahead to enterprise production at EastWest Bank, this architecture is positioned to expand into:*
-> *- Digital eKYC with PhilSys National ID OCR and facial liveness checks,*
-> *- Core Banking API integration for balance inquiries and InstaPay transfers via OAuth 2.0 with OTP, and*
-> *- Full Azure Cosmos DB persistence with AES-256 field-level encryption for BSP Circular 982 compliance.*
+> *"Looking ahead to enterprise deployment at EastWest Bank, this architecture is ready to scale:*
 >
-> *The entire codebase, tests, and documentation are available on my GitHub repository, and the bot is live on Vercel.*
+> *1. Digital eKYC: Integrating Philippine National ID (PhilSys) OCR scanning and 3D facial liveness verification directly into Adaptive Cards, with automated AMLC sanctions checks.*
+> *2. Core Banking APIs: Connecting via OAuth 2.0 and Step-Up OTP for real-time account balances, credit card activations, and InstaPay transfers.*
+> *3. Enterprise Storage: Upgrading ephemeral state to Azure Cosmos DB with Customer-Managed Keys and AES-256 field-level PII encryption for BSP Circular 982 compliance.*
 >
-> *Thank you very much to the DCBSD team for your time and consideration. I look forward to the next steps!"*
+> *All code, test suites, and documentation are committed and pushed to my public GitHub repository, and the bot is live on Vercel.*
+>
+> *Thank you very much to the DCBSD team for this technical examination. I look forward to the next steps and the opportunity to help drive digital banking forward at EastWest Bank. Have a great day!"*
 
 ---
 
-## ⏱️ Scene Timing Cheat-Sheet
+## ⏱️ Scene-by-Scene Quick Reference
 
-| Scene | What You Are Doing | Target Time |
-|:---:|---|:---:|
-| **1** | Welcome & Sidenote Agents SDK mention | 0:00 – 0:40 |
-| **2** | Live Conversational Flow (Name → Mobile → Address → Card) | 0:40 – 1:35 |
-| **3** | Adaptive Card Intake Form (Header button) | 1:35 – 2:10 |
-| **4** | Validation Error & Recovery ('12345' → valid) | 2:10 – 2:50 |
-| **5** | Architecture, SDKs & CIA Triad | 2:50 – 3:50 |
-| **6** | 5 Obstacles & Resolutions | 3:50 – 4:40 |
-| **7** | Terminal: `npm run test:requirements` live | 4:40 – 5:10 |
-| **8** | Future Roadmap & Thank You | 5:10 – 5:45 |
+| Scene | Topic | Timestamp | What You Do On Screen |
+|:---:|---|:---:|---|
+| **1** | Introduction & Exam Journey | 0:00 – 0:45 | Show EastWest Bank chat UI |
+| **2** | Conversational Intake (Happy Path) | 0:45 – 1:40 | Type Name, Mobile, Address, Click 'Yes' |
+| **3** | Adaptive Card Intake Form | 1:40 – 2:20 | Click 'Intake Form' in header, show Input.Text |
+| **4** | Validation & Professional UI | 2:20 – 3:05 | Type '12345', recover with valid mobile |
+| **5** | Security Architecture & CIA Triad | 3:05 – 3:55 | Explain Confidentiality, Integrity, Availability |
+| **6** | SDK v4 + Agents SDK & AI Pairing | 3:55 – 4:45 | Explain `agentsHandler.ts` & how AI assisted |
+| **7** | Automated Test Suite (Live Run) | 4:45 – 5:20 | Run `npm run test:requirements` in terminal |
+| **8** | Future Banking Vision & Closing | 5:20 – 5:50 | eKYC, Core Banking, Cosmos DB, Sign-off |
